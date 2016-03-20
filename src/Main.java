@@ -7,8 +7,7 @@ import java.sql.*;
 public class Main {
     public static void main(String[] args) {
 
-        JFrame frame = new MainFrame();
-        frame.show();
+        MainComboBox.run(new MainComboBox());
 
         // write your code here
         try{
