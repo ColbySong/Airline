@@ -12,8 +12,6 @@ import java.util.List;
  */
 public class MainComboBox extends JApplet {
 
-    private JTextField  t = new JTextField(15);
-
     private JComboBox c = new JComboBox();
 
     private JButton b = new JButton("Get Passenger");
@@ -29,7 +27,6 @@ public class MainComboBox extends JApplet {
             while(mySet.next()){
                 c.addItem(mySet.getString("passport_no"));
             }
-            t.setEditable(false);
 
             b.addActionListener(new ActionListener() {
                 @Override
@@ -42,7 +39,6 @@ public class MainComboBox extends JApplet {
 
             cp.add(label);
             cp.setLayout(new FlowLayout());
-            cp.add(t);
             cp.add(c);
             cp.add(b);
 
@@ -58,8 +54,6 @@ public class MainComboBox extends JApplet {
             ResultSet mySet = Main.myStat.executeQuery("select * from passengers where passport_no = \"" + selectedItem + "\"");
             while(mySet.next()){
                 label.setText(mySet.getString("first_name") + " " + mySet.getString("last_name"));
-
-                System.out.println(mySet.getString("first_name") + " " + mySet.getString("last_name"));
             }
         }
         catch (Exception e){

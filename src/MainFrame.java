@@ -7,6 +7,7 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
         setSize(700, 700);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //setVisible(true);
     }

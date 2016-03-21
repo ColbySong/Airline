@@ -55,7 +55,6 @@ public class QueryFlights extends JFrame {
         c.setLayout(new FlowLayout());
         c.add(cb_airportid_depart);
 
-
         button = new JButton("Search");
         button.addActionListener(new ActionListener() {
             @Override
@@ -89,7 +88,6 @@ public class QueryFlights extends JFrame {
         catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
     private void refreshTable() {
