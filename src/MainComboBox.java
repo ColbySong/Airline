@@ -2,13 +2,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by BenGee on 2016-03-20.
  */
 public class MainComboBox extends JApplet {
 
-    private String[] courseList = {"CPSC 110", "CPSC 210", "CPSC 221", "CPSC 213", "CPSC 310", "CPSC 304", "CPSC 317"};
+    private Statement myStat;
+
+    public MainComboBox(Statement myStat) {
+        this.myStat = myStat;
+    }
 
     private JTextField  t = new JTextField(15);
 
@@ -16,35 +24,45 @@ public class MainComboBox extends JApplet {
 
     private JButton b = new JButton("Add new course");
 
-    private int count = 0;
-
     public void init() {
-        for (int i = 0; i < 4; i++) {
-            c.addItem(courseList[count++]);
-        }
-        t.setEditable(false);
-        b.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (count < courseList.length) {
-                    c.addItem(courseList[count++]);
-                }
-            }
-        });
-        c.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                t.setText("index: " + c.getSelectedIndex() + "   "
-                        + ((JComboBox) e.getSource()).getSelectedItem().toString());
-            }
-        });
+        try{
+            ResultSet mySet = myStat.executeQuery("select * from passengers");
 
-        Container cp = getContentPane();
-        cp.setLayout(new FlowLayout());
-        cp.add(t);
-        cp.add(c);
-        cp.add(b);
+            while(mySet.next()){
+                c.addItem(mySet.getString("passport_no"));
+            }
+            t.setEditable(false);
+
+            b.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    query(c.getSelectedItem());
+                }
+            });
+
+            Container cp = getContentPane();
+            cp.setLayout(new FlowLayout());
+            cp.add(t);
+            cp.add(c);
+            cp.add(b);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
+
+    private void query(Object selectedItem) {
+        try{
+            ResultSet mySet = myStat.executeQuery("select * from passengers where passport_no = \"" + selectedItem + "\"");
+            while(mySet.next()){
+                System.out.println(mySet.getString("first_name") + " " + mySet.getString("last_name"));
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
     public static void run(JApplet applet) {
         JFrame frame = new MainFrame();
