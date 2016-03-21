@@ -22,7 +22,11 @@ public class MainComboBox extends JApplet {
 
     private JComboBox c = new JComboBox();
 
-    private JButton b = new JButton("Add new course");
+    private JButton b = new JButton("Get Passenger");
+
+    private Container cp;
+
+    private JLabel label = new JLabel();
 
     public void init() {
         try{
@@ -40,11 +44,15 @@ public class MainComboBox extends JApplet {
                 }
             });
 
-            Container cp = getContentPane();
+            cp = getContentPane();
+
+            cp.add(label);
             cp.setLayout(new FlowLayout());
             cp.add(t);
             cp.add(c);
             cp.add(b);
+
+
         }
         catch (Exception e){
             e.printStackTrace();
@@ -55,6 +63,8 @@ public class MainComboBox extends JApplet {
         try{
             ResultSet mySet = myStat.executeQuery("select * from passengers where passport_no = \"" + selectedItem + "\"");
             while(mySet.next()){
+                label.setText(mySet.getString("first_name") + " " + mySet.getString("last_name"));
+
                 System.out.println(mySet.getString("first_name") + " " + mySet.getString("last_name"));
             }
         }
@@ -69,5 +79,6 @@ public class MainComboBox extends JApplet {
         frame.getContentPane().add(applet);
         applet.init();
         applet.start();
+
     }
 }
