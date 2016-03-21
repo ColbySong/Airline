@@ -8,6 +8,6 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         setSize(750, 450);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setVisible(true);
+        //setVisible(true);
     }
 }

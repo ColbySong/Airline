@@ -79,6 +79,7 @@ public class MainComboBox extends JApplet {
         frame.getContentPane().add(applet);
         applet.init();
         applet.start();
+        frame.show();
 
     }
 }
