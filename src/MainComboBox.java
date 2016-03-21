@@ -12,12 +12,6 @@ import java.util.List;
  */
 public class MainComboBox extends JApplet {
 
-    private Statement myStat;
-
-    public MainComboBox(Statement myStat) {
-        this.myStat = myStat;
-    }
-
     private JTextField  t = new JTextField(15);
 
     private JComboBox c = new JComboBox();
@@ -30,7 +24,7 @@ public class MainComboBox extends JApplet {
 
     public void init() {
         try{
-            ResultSet mySet = myStat.executeQuery("select * from passengers");
+            ResultSet mySet = Main.myStat.executeQuery("select * from passengers");
 
             while(mySet.next()){
                 c.addItem(mySet.getString("passport_no"));
@@ -61,7 +55,7 @@ public class MainComboBox extends JApplet {
 
     private void query(Object selectedItem) {
         try{
-            ResultSet mySet = myStat.executeQuery("select * from passengers where passport_no = \"" + selectedItem + "\"");
+            ResultSet mySet = Main.myStat.executeQuery("select * from passengers where passport_no = \"" + selectedItem + "\"");
             while(mySet.next()){
                 label.setText(mySet.getString("first_name") + " " + mySet.getString("last_name"));
 
@@ -79,7 +73,7 @@ public class MainComboBox extends JApplet {
         frame.getContentPane().add(applet);
         applet.init();
         applet.start();
-        frame.show();
+        frame.setVisible(true);
 
     }
 }

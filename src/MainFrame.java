@@ -6,7 +6,7 @@ import javax.swing.*;
 public class MainFrame extends JFrame {
 
     public MainFrame() {
-        setSize(750, 450);
+        setSize(700, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //setVisible(true);
     }
