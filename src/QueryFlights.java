@@ -9,12 +9,13 @@ import java.util.List;
 /**
  * Created by Daniel on 2016-03-20.
  */
-public class QueryFlights extends JFrame {
-    private JComboBox cb_airportid_depart;
-    private Container c;
-    private JScrollPane sp;
+public class QueryFlights {
+    private JPanel panel;
+    private JComboBox departureAirportIDComboBox;
+    private JScrollPane scrollPane;
     private JLabel label;
-    private JButton button;
+    private JButton getFlightsButton;
+    private JButton backButton;
     private JTable table;
     private String[] columns = new String[] {
             "Flight Number", "Cost", "Depart From", "Departure Date", "Departure Time",
@@ -23,14 +24,14 @@ public class QueryFlights extends JFrame {
 
 
     public void init() {
-        setTitle("Search for Flights");
-        setSize(700, 700);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setVisible(true);
+        panel = new JPanel();
+        panel.setLayout(new FlowLayout());
+        Main.frame.add(panel);
 
-        cb_airportid_depart = new JComboBox();
+        label = new JLabel("Filter by Departing Airport");
+        panel.add(label);
 
+        departureAirportIDComboBox = new JComboBox();
         try{
             ResultSet mySet = Main.myStat.executeQuery("select * from flights");
 
@@ -44,29 +45,33 @@ public class QueryFlights extends JFrame {
             }
 
             for (int i = 0; i < results.size(); i++) {
-                cb_airportid_depart.addItem(results.get(i));
+                departureAirportIDComboBox.addItem(results.get(i));
             }
         }
         catch (Exception e){
             e.printStackTrace();
         }
+        panel.add(departureAirportIDComboBox);
 
-        c = new Container();
-        c = getContentPane();
-        c.setLayout(new FlowLayout());
-        c.add(cb_airportid_depart);
-
-        button = new JButton("Search");
-        button.addActionListener(new ActionListener() {
+        getFlightsButton = new JButton("Get Flights");
+        getFlightsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                searchFlights(cb_airportid_depart.getSelectedItem());
+                searchFlights(departureAirportIDComboBox.getSelectedItem());
+            }
+
+        });
+        panel.add(getFlightsButton);
+
+        backButton = new JButton("Back");
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.setVisible(false);
+                Main.panel.setVisible(true);
             }
         });
-        c.add(button);
-
-        label = new JLabel("Filter by Departing Airport");
-        c.add(label);
+        panel.add(backButton);
     }
 
     private void searchFlights(Object selectedItem) {
@@ -97,14 +102,14 @@ public class QueryFlights extends JFrame {
     }
 
     private void refreshTable() {
-        if (sp != null) {
-            c.remove(sp);
+        if (scrollPane != null) {
+            panel.remove(scrollPane);
         }
 
         table = new JTable(data, columns);
-        sp = new JScrollPane(table);
-        c.add(sp);
-        c.revalidate();
-        c.repaint();
+        scrollPane = new JScrollPane(table);
+        panel.add(scrollPane);
+        panel.revalidate();
+        panel.repaint();
     }
 }

@@ -10,9 +10,10 @@ import java.sql.*;
 public class Main {
 
     public static Statement myStat;
+    public static JFrame frame;
+    public static JPanel panel;
 
     public static void main(String[] args) {
-        // write your code here
         try{
             Connection myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/airline", "root", "1234");
             myStat = myConn.createStatement();
@@ -21,30 +22,33 @@ public class Main {
             e.printStackTrace();
         }
 
-        JFrame frame = new JFrame("Airline");
-        JPanel panel = new JPanel();
+        frame = new JFrame("Airline");
+        panel = new JPanel();
         panel.setLayout(new FlowLayout());
         frame.add(panel);
         frame.setSize(700, 700);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JButton searchFlightButton = new JButton("Search for flights!");
+        JButton searchFlightButton = new JButton("Search for Flights");
         panel.add(searchFlightButton);
         searchFlightButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                panel.setVisible(false);
                 QueryFlights qf = new QueryFlights();
                 qf.init();
             }
         });
 
-        JButton searchPassengerButton = new JButton("Search for Passenger");
+        JButton searchPassengerButton = new JButton("Search for Passengers");
         panel.add(searchPassengerButton);
         searchPassengerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MainComboBox.run(new MainComboBox());
+                panel.setVisible(false);
+                QueryPassengers qp = new QueryPassengers();
+                qp.init();
             }
         });
 
