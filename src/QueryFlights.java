@@ -12,13 +12,14 @@ import java.util.List;
 public class QueryFlights extends JFrame {
     private JComboBox cb_airportid_depart;
     private Container c;
-    JLabel label;
-    JButton button;
-    JTable table;
-    String[] columns = new String[] {
+    private JScrollPane sp;
+    private JLabel label;
+    private JButton button;
+    private JTable table;
+    private String[] columns = new String[] {
             "Flight Number", "Cost", "Depart From", "Departure Date", "Departure Time",
             "Arrive In", "Arrival Date", "Arrival Time", "Seats Remaining"};
-    Object[][] data = new Object[100][9];
+    private Object[][] data;
 
 
     public void init() {
@@ -66,16 +67,21 @@ public class QueryFlights extends JFrame {
 
         label = new JLabel("Filter by Departing Airport");
         c.add(label);
-
-        table = new JTable(data, columns);
-        c.add(new JScrollPane(table));
     }
 
     private void searchFlights(Object selectedItem) {
         try{
             ResultSet mySet = Main.myStat.executeQuery("select flight_no, cost, airportid_depart, date_depart, time_depart, airportid_arrive, data_arrive, time_arrive, available_seats from flights where airportid_depart = \"" + selectedItem + "\"");
 
+            int rowCount = 0;
+            if (mySet.last()) {
+                rowCount = mySet.getRow();
+                mySet.beforeFirst();
+            }
+
+            data = new Object[rowCount][columns.length];
             int j = 0;
+
             while(mySet.next()){
                 for (int i = 0; i < 9; i++) {
                     data[j][i] = mySet.getObject(i+1);
@@ -91,9 +97,14 @@ public class QueryFlights extends JFrame {
     }
 
     private void refreshTable() {
-        c.remove(table);
+        if (sp != null) {
+            c.remove(sp);
+        }
+
         table = new JTable(data, columns);
-        c.add(new JScrollPane(table));
+        sp = new JScrollPane(table);
+        c.add(sp);
+        c.revalidate();
         c.repaint();
     }
 }
