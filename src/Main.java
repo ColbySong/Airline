@@ -13,6 +13,9 @@ public class Main {
     public static JFrame frame;
     public static JPanel panel;
 
+    private static JTextField passportNoLogin;
+    private static JLabel invalidPassportNoLabel;
+
     public static void main(String[] args) {
         try {
             Connection myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/airline", "root", "1234");
@@ -41,8 +44,6 @@ public class Main {
             }
         });
 
-
-
         JButton searchPassengerButton = new JButton("Search for Passengers");
         panel.add(searchPassengerButton);
         searchPassengerButton.addActionListener(new ActionListener() {
@@ -53,9 +54,6 @@ public class Main {
                 qp.init();
             }
         });
-
-
-
 
         JButton searchBaggagesForPassengerButton = new JButton(("Search for Baggages for a Passenger"));
         panel.add(searchBaggagesForPassengerButton);
@@ -68,9 +66,9 @@ public class Main {
             }
         });
 
-        JButton searchFlightsReserversPassenger = new JButton(("Search for Reserved Flights for a Passenger"));
-        panel.add(searchFlightsReserversPassenger);
-        searchFlightsReserversPassenger.addActionListener(new ActionListener() {
+        JButton searchFlightsReservesPassenger = new JButton(("Search for Reserved Flights for a Passenger"));
+        panel.add(searchFlightsReservesPassenger);
+        searchFlightsReservesPassenger.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 panel.setVisible(false);
@@ -79,6 +77,48 @@ public class Main {
             }
         });
 
+        JLabel loginLabel = new JLabel("Login with your Passport Number");
+        panel.add(loginLabel);
+
+        passportNoLogin = new JTextField(20);
+        passportNoLogin.setSize(100, 10);
+        panel.add(passportNoLogin);
+
+        JButton loginAsPassengerButton = new JButton("Login as Passenger");
+        loginAsPassengerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (isValidPassenger(passportNoLogin.getText())) {
+                    panel.setVisible(false);
+                    Passenger p = new Passenger();
+                    p.init(passportNoLogin.getText());
+                }
+            }
+        });
+        panel.add(loginAsPassengerButton);
+
+        invalidPassportNoLabel = new JLabel();
+        panel.add(invalidPassportNoLabel);
+
         frame.setVisible(true);
+    }
+
+    private static boolean isValidPassenger(String p) {
+        try {
+            ResultSet mySet = Main.myStat.executeQuery("select passport_no from passengers where passport_no = \"" + p + "\"");
+
+            if (mySet.isBeforeFirst() && mySet.next() && mySet.getString("passport_no").equals(p)) {
+                invalidPassportNoLabel.setText("");
+                return true;
+            } else {
+                invalidPassportNoLabel.setText("Invalid passport number, please try again");
+                return false;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }
