@@ -14,10 +14,7 @@ public class Passenger {
     public static String passengerFirstName;
     public static String passengerLastName;
 
-    private JPanel panel;
-    private JButton logoutButton;
-    private JLabel loggedInLabel;
-
+    public static JPanel panel;
 
     public void init(String passportNo) {
         this.passengerPassportNo = passportNo;
@@ -36,10 +33,10 @@ public class Passenger {
         panel.setLayout(new FlowLayout());
         Main.frame.add(panel);
 
-        loggedInLabel = new JLabel("You are logged in as " + passengerFirstName + " " + passengerLastName + "!");
+        JLabel loggedInLabel = new JLabel("You are logged in as " + passengerFirstName + " " + passengerLastName + "!");
         panel.add(loggedInLabel);
 
-        logoutButton = new JButton("Logout");
+        JButton logoutButton = new JButton("Logout");
         logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -48,5 +45,16 @@ public class Passenger {
             }
         });
         panel.add(logoutButton);
+
+        JButton myFlightsButton = new JButton("My Flights");
+        myFlightsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MyFlights mf = new MyFlights();
+                mf.init(passengerPassportNo);
+                panel.setVisible(false);
+            }
+        });
+        panel.add(myFlightsButton);
     }
 }
