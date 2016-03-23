@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -41,7 +42,18 @@ public class QueryFlights {
             "Arrive In", "Arrival Date", "Arrival Time", "Seats Remaining"};
     private Object[][] data;
 
+    private List<String> filterColumns = new ArrayList<>();
+
     private String filteredBy = "";
+
+    private String select_clause = "select ";
+    private String from_clause = "from flights ";
+    private String where_clause = "where ";
+    private String group_by = "group by ";
+
+    private Boolean select_triggered = false;
+    private Boolean where_triggered = false;
+    private Boolean groupby_triggered = false;
 
     public void init() {
 
@@ -50,6 +62,9 @@ public class QueryFlights {
         panel.setLayout(new GridBagLayout());
         Main.frame.add(panel);
 
+        /**
+         * Back button layout
+         */
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 5;
         c.gridy = 0;
@@ -63,45 +78,128 @@ public class QueryFlights {
         });
         panel.add(backButton, c);
 
-        // ****** //
-
+        /**
+         * Filtering Checkboxes (select ...)
+         */
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 1;
         arrivalAirportCB = new JCheckBox("Arriving Airport");
+        arrivalAirportCB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (arrivalAirportCB.isSelected()) {
+                    filterColumns.add("Arriving In");
+                    select_clause += "airportid_arrive, ";
+                }
+                else {
+                    filterColumns.remove("Arriving In");
+                    select_clause = select_clause.replace("airportid_arrive, ", "");
+                }
+            }
+        });
         panel.add(arrivalAirportCB, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 2;
         departingAirportCB = new JCheckBox("Departing Airport");
+        departingAirportCB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (departingAirportCB.isSelected()) {
+                    filterColumns.add("Depart From");
+                    select_clause += "airportid_depart, ";
+                }
+                else {
+                    filterColumns.remove("Depart From");
+                    select_clause = select_clause.replace("airportid_depart, ", "");
+                }
+            }
+        });
         panel.add(departingAirportCB, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 1;
         arrivalDateCB = new JCheckBox("Arriving Date");
+        arrivalDateCB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (arrivalDateCB.isSelected()) {
+                    filterColumns.add("Arrival Date");
+                    select_clause += "date_arrive, ";
+                }
+                else {
+                    filterColumns.remove("Arrival Date");
+                    select_clause = select_clause.replace("date_arrive, ", "");
+                }
+            }
+        });
         panel.add(arrivalDateCB, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 2;
         arrivalTimeCB = new JCheckBox("Arriving Time");
+        arrivalTimeCB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (arrivalTimeCB.isSelected()) {
+                    filterColumns.add("Arrival Time");
+                    select_clause += "time_arrive, ";
+                }
+                else {
+                    filterColumns.remove("Arrival Time");
+                    select_clause = select_clause.replace("time_arrive, ", "");
+                }
+            }
+        });
         panel.add(arrivalTimeCB, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 2;
         c.gridy = 1;
         departingDateCB = new JCheckBox("Departing Date");
+        departingDateCB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (departingDateCB.isSelected()) {
+                    filterColumns.add("Departure Date");
+                    select_clause += "date_depart, ";
+                }
+                else {
+                    filterColumns.remove("Departure Date");
+                    select_clause = select_clause.replace("date_depart, ", "");
+                }
+            }
+        });
         panel.add(departingDateCB, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 2;
         c.gridy = 2;
         departingTimeCB = new JCheckBox("Departing Time");
+        departingTimeCB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (departingTimeCB.isSelected()) {
+                    filterColumns.add("Departure Time");
+
+                    select_clause += "time_depart, ";
+                }
+                else {
+                    filterColumns.remove("Departure Time");
+                    select_clause = select_clause.replace("time_depart, ", "");
+                }
+            }
+        });
         panel.add(departingTimeCB, c);
 
-        // ****** //
+        /**
+         * Departing Airport Dropdown (where airportid_depart = ...)
+         */
+        // TODO: implement these where queries
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
@@ -116,7 +214,10 @@ public class QueryFlights {
         generateDepartureDropDown();
         panel.add(departureAirportIDComboBox, c);
 
-        // ****** //
+        /**
+         * Arriving Airport Dropdown (where airportid_arrive = ...)
+         */
+        // TODO: implement these where queries
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 2;
@@ -131,7 +232,10 @@ public class QueryFlights {
         generateArrivalDropDown();
         panel.add(arrivalAirportIDComboBox, c);
 
-        // ****** //
+        /**
+         * Sort by filter (group by ...)
+         */
+        // TODO: implement these group by queries
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 4;
@@ -146,16 +250,18 @@ public class QueryFlights {
         generateSortByDropDown();
         panel.add(sortByComboBox, c);
 
-        // ****** //
-
+        /**
+         * Flight Table Title with filter suffix
+         */
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 4;
         flightDetailLabel = new JLabel("All Flights " + filteredBy);
         panel.add(flightDetailLabel, c);
 
-        // ****** //
-
+        /**
+         * Filter Search Button
+         */
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 5;
         c.gridy = 4;
@@ -164,6 +270,8 @@ public class QueryFlights {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                // TODO: implement requeryAll if no checkboxes are checked and filter button is pressed
+                filterSearch();
             }
         });
         panel.add(filterButton, c);
@@ -183,7 +291,6 @@ public class QueryFlights {
                     results.add(result);
                 }
             }
-
             for (int i = 0; i < results.size(); i++) {
                 departureAirportIDComboBox.addItem(results.get(i));
             }
@@ -223,7 +330,7 @@ public class QueryFlights {
 
     private void displayAllFlightDetails() {
         try {
-            ResultSet allDetailsSet = Main.myStat.executeQuery("select flight_no, cost, airportid_depart, date_depart, time_depart, airportid_arrive, data_arrive, time_arrive, available_seats from flights");
+            ResultSet allDetailsSet = Main.myStat.executeQuery("select flight_no, cost, airportid_depart, date_depart, time_depart, airportid_arrive, date_arrive, time_arrive, available_seats from flights");
 
             int rowCount = 0;
             if (allDetailsSet.last()) {
@@ -240,14 +347,62 @@ public class QueryFlights {
                 }
                 j++;
             }
-            refreshTable();
+            refreshTable(columns);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private void refreshTable() {
+    private void filterSearch() {
+        formatSelectClause();
+        String sql = select_clause + from_clause;
+        //System.out.println(sql);
+        select_clause = "select ";
+        try {
+            ResultSet filteredSet = Main.myStat.executeQuery(sql);
+
+            String[] filterArray = Arrays.copyOf(filterColumns.toArray(), filterColumns.toArray().length, String[].class);
+
+            int rowCount = 0;
+            if (filteredSet.last()) {
+                rowCount = filteredSet.getRow();
+                filteredSet.beforeFirst();
+            }
+
+            data = new Object[rowCount][filterArray.length];
+            int j = 0;
+
+            while (filteredSet.next()) {
+                for (int i = 0; i < filterArray.length; i++) {
+                    data[j][i] = filteredSet.getObject(i + 1);
+                }
+                j++;
+            }
+            filterColumns.clear();
+            deselectAllCheckBoxes();
+            refreshTable(filterArray);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void formatSelectClause() {
+        select_clause = select_clause.substring(0, select_clause.length() - 2);
+        select_clause += " ";
+    }
+
+    private void deselectAllCheckBoxes() {
+        arrivalAirportCB.setSelected(false);
+        departingAirportCB.setSelected(false);
+        arrivalDateCB.setSelected(false);
+        arrivalTimeCB.setSelected(false);
+        departingDateCB.setSelected(false);
+        departingTimeCB.setSelected(false);
+    }
+
+    private void refreshTable(String[] columnNames) {
         if (scrollPane != null) {
             panel.remove(scrollPane);
         }
@@ -256,7 +411,7 @@ public class QueryFlights {
         c.gridy = 5;
         c.gridwidth = 10;
         c.gridheight = 0;
-        table = new JTable(data, columns);
+        table = new JTable(data, columnNames);
         scrollPane = new JScrollPane(table);
         panel.add(scrollPane, c);
         panel.revalidate();
