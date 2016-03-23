@@ -42,7 +42,7 @@ public class QueryFlights {
             "Arrive In", "Arrival Date", "Arrival Time", "Seats Remaining"};
     private Object[][] data;
 
-    private List<String> filterColumns = new ArrayList<>();
+    private List<String> filterColumns = new ArrayList<String>();
 
     private String filteredBy = "";
 
@@ -283,7 +283,7 @@ public class QueryFlights {
         try {
             ResultSet departureSet = Main.myStat.executeQuery("select airportid_depart from flights");
 
-            List<String> results = new ArrayList<>();
+            List<String> results = new ArrayList<String>();
 
             while (departureSet.next()) {
                 String result = departureSet.getString("airportid_depart");
@@ -303,7 +303,7 @@ public class QueryFlights {
         try {
             ResultSet arrivalSet = Main.myStat.executeQuery("select airportid_arrive from flights");
 
-            List<String> results = new ArrayList<>();
+            List<String> results = new ArrayList<String>();
 
             while (arrivalSet.next()) {
                 String result = arrivalSet.getString("airportid_arrive");
