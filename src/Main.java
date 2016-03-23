@@ -41,6 +41,8 @@ public class Main {
             }
         });
 
+
+
         JButton searchPassengerButton = new JButton("Search for Passengers");
         panel.add(searchPassengerButton);
         searchPassengerButton.addActionListener(new ActionListener() {
@@ -49,6 +51,31 @@ public class Main {
                 panel.setVisible(false);
                 QueryPassengers qp = new QueryPassengers();
                 qp.init();
+            }
+        });
+
+
+
+
+        JButton searchBaggagesForPassengerButton = new JButton(("Search for Baggages for a Passenger"));
+        panel.add(searchBaggagesForPassengerButton);
+        searchBaggagesForPassengerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.setVisible(false);
+                QueryJoin qj = new QueryJoin();
+                qj.init();
+            }
+        });
+
+        JButton searchFlightsReserversPassenger = new JButton(("Search for Reserved Flights for a Passenger"));
+        panel.add(searchFlightsReserversPassenger);
+        searchFlightsReserversPassenger.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.setVisible(false);
+                QueryJoin2 qj2 = new QueryJoin2();
+                qj2.init();
             }
         });
 
