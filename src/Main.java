@@ -14,7 +14,7 @@ public class Main {
     public static JPanel panel;
 
     public static void main(String[] args) {
-        try{
+        try {
             Connection myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/airline", "root", "1234");
             myStat = myConn.createStatement();
         }
