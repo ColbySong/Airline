@@ -30,7 +30,8 @@ public class Main {
         panel = new JPanel();
         panel.setLayout(new FlowLayout());
         frame.add(panel);
-        frame.setSize(700, 700);
+        frame.pack();
+        frame.setSize(800, 600);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
