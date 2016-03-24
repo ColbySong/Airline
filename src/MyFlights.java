@@ -11,7 +11,7 @@ public class MyFlights {
 
     private static final String[] columns = new String[] {
             "Flight Number", "Cost", "Depart From", "Departure Date", "Departure Time",
-            "Arrive In", "Arrival Date", "Arrival Time", "Seats Remaining"};
+            "Arrive In", "Arrival Date", "Arrival Time", "Seat Number", "Confirmation Number"};
     private Object[][] data;
 
     private JPanel panel;
@@ -52,7 +52,7 @@ public class MyFlights {
 
     private void searchFlights(Object selectedItem) {
         try{
-            ResultSet mySet = Main.myStat.executeQuery("select flight_no, cost, airportid_depart, date_depart, time_depart, airportid_arrive, date_arrive, time_arrive, available_seats from reserves natural join flights where passport_no = \"" + selectedItem + "\"");
+            ResultSet mySet = Main.myStat.executeQuery("select flight_no, cost, airportid_depart, date_depart, time_depart, airportid_arrive, date_arrive, time_arrive, seat_no, confirmation_no from reserves natural join flights where passport_no = \"" + selectedItem + "\"");
 
             int rowCount = 0;
             if (mySet.last()) {
@@ -64,7 +64,7 @@ public class MyFlights {
             int j = 0;
 
             while(mySet.next()){
-                for (int i = 0; i < 9; i++) {
+                for (int i = 0; i < columns.length; i++) {
                     data[j][i] = mySet.getObject(i+1);
                 }
                 j++;

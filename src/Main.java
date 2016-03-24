@@ -29,8 +29,8 @@ public class Main {
         panel = new JPanel();
         panel.setLayout(new FlowLayout());
         frame.add(panel);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setSize(700, 700);
-        frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JButton searchFlightButton = new JButton("Search for Flights");
