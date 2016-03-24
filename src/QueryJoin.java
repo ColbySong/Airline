@@ -1,3 +1,5 @@
+import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -65,7 +67,8 @@ public class QueryJoin {
     public void searchBaggages(){
         try{
             ResultSet mySet = Main.myStat.executeQuery(
-                    "select * from baggages, passengers where passengers.passport_no = baggages.passport_no AND "+ passport_no_to_query +" = passengers.passenger_id");
+                    "select * from baggages, passengers where passengers.passport_no = baggages.passport_no AND "+
+                            passport_no_to_query +" = passengers.passenger_id");
             int rowCount = 0;
 
             if(mySet.last()){
@@ -86,11 +89,15 @@ public class QueryJoin {
 
             }
 
-            label.setText("Baggages Info of Passenger "+ firstName + " " + lastName);
+            label.setText("Baggages Info of Passenger " + firstName + " " + lastName);
             panel.add(label);
 
 
             refreshTable();
+        }catch(MySQLSyntaxErrorException e){
+            JLabel error = new JLabel();
+            error.setText("Please enter a valid Passenger ID");
+            panel.add(error);
         }catch(Exception e){
             e.printStackTrace();
         }
