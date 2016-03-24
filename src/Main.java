@@ -46,17 +46,6 @@ public class Main {
             }
         });
 
-        JButton searchPassengerDivisionButton = new JButton("Search for Passenger who booked all flights");
-        panel.add(searchPassengerDivisionButton);
-        searchPassengerDivisionButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                panel.setVisible(false);
-                QueryDivision qd = new QueryDivision();
-                qd.init();
-            }
-        });
-
         JButton searchPassengerButton = new JButton("Search for Passengers");
         panel.add(searchPassengerButton);
         searchPassengerButton.addActionListener(new ActionListener() {
@@ -65,28 +54,6 @@ public class Main {
                 panel.setVisible(false);
                 QueryPassengers qp = new QueryPassengers();
                 qp.init();
-            }
-        });
-
-        JButton searchBaggagesForPassengerButton = new JButton(("Search for Baggages for a Passenger"));
-        panel.add(searchBaggagesForPassengerButton);
-        searchBaggagesForPassengerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                panel.setVisible(false);
-                QueryJoin qj = new QueryJoin();
-                qj.init();
-            }
-        });
-
-        JButton searchFlightsReservesPassenger = new JButton(("Search for Reserved Flights for a Passenger"));
-        panel.add(searchFlightsReservesPassenger);
-        searchFlightsReservesPassenger.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                panel.setVisible(false);
-                QueryJoin2 qj2 = new QueryJoin2();
-                qj2.init();
             }
         });
 
@@ -130,10 +97,11 @@ public class Main {
         adminIdLoginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                panel.setVisible(false);
-                AdminPanel ap = new AdminPanel();
-                ap.init();
-                // TODO: create valid admin usernames
+                if (adminIdLogin.getText().equals("j4w9a")) {
+                    panel.setVisible(false);
+                    AdminPanel ap = new AdminPanel();
+                    ap.init();
+                }
             }
         });
 
