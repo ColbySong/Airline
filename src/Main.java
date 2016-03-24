@@ -14,6 +14,7 @@ public class Main {
     public static JPanel panel;
 
     private static JTextField passportNoLogin;
+    private static JTextField adminIdLogin;
     private static JLabel invalidPassportNoLabel;
 
     public static void main(String[] args) {
@@ -41,6 +42,17 @@ public class Main {
                 panel.setVisible(false);
                 QueryFlights qf = new QueryFlights();
                 qf.init();
+            }
+        });
+
+        JButton searchPassengerDivisionButton = new JButton("Search for Passenger who booked all flights");
+        panel.add(searchPassengerDivisionButton);
+        searchPassengerDivisionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.setVisible(false);
+                QueryDivision qd = new QueryDivision();
+                qd.init();
             }
         });
 
@@ -77,6 +89,7 @@ public class Main {
             }
         });
 
+        // passenger login
         JLabel loginLabel = new JLabel("Login with your Passport Number");
         panel.add(loginLabel);
 
@@ -101,6 +114,27 @@ public class Main {
         panel.add(invalidPassportNoLabel);
 
         frame.setVisible(true);
+
+
+        //admin login
+        final JLabel adminLoginLabel = new JLabel("Login with your admin ID");
+        panel.add(adminLoginLabel);
+
+        adminIdLogin = new JTextField(20);
+        adminLoginLabel.setSize(100, 10);
+        panel.add(adminIdLogin);
+
+        JButton adminIdLoginButton = new JButton("Login as Admin");
+        panel.add(adminIdLoginButton);
+        adminIdLoginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO: create new panel which will have actions that can be done by admin
+                // TODO: create valid admin usernames
+
+            }
+        });
+
     }
 
     private static boolean isValidPassenger(String p) {
