@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 public class DeleteBaggage {
     private JPanel panel;
     private JLabel label = new JLabel();
+    private JLabel label2 = new JLabel();
     private JLabel prompt;
     private String baggage_id_to_query;
     private JTable table;
@@ -17,8 +18,7 @@ public class DeleteBaggage {
     private JScrollPane scrollPane;
     private String[] columns = new String[]{"Passenger ID", "Baggage ID","Weight", "Type"};
     private JButton backButton;
-    private String firstName;
-    private String lastName;
+
 
     public void init(){
         panel = new JPanel();
@@ -41,7 +41,7 @@ public class DeleteBaggage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 baggage_id_to_query = baggage_id.getText();
-                searchReservedFlights();
+                deleteBaggage();
             }
         });
         panel.add(search);
@@ -59,14 +59,47 @@ public class DeleteBaggage {
         });
         panel.add(backButton);
 
+        viewAllBaggages();
+
     }
 
-    public void searchReservedFlights(){
+    private void viewAllBaggages() {
+        try{
+            ResultSet mySet = Main.myStat.executeQuery("select passenger_id, baggage_id, weight, type " +
+                    "from baggages, passengers where passengers.passport_no = baggages.passport_no");
+
+            int rowCount = 0;
+
+            if(mySet.last()){
+                rowCount = mySet.getRow();
+                mySet.beforeFirst();
+            }
+
+            data = new Object[rowCount][columns.length];
+            int j = 0;
+
+            while(mySet.next()){
+                for(int i=0; i<columns.length; i++) {
+                    data[j][i] = mySet.getObject(i+1);
+                }
+                j++;
+
+
+            }
+            refreshTable();
+        }catch(Exception e){
+            label.setText("Baggage Not Found");
+            panel.add(label);
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteBaggage(){
         try{
             Main.myStat.executeUpdate(
                     "Delete from baggages where baggage_id = " + baggage_id_to_query
             );
-            ResultSet mySet = Main.myStat.executeQuery("select passenger_id, baggage_id, weight, type, first_name, last_name  " +
+            ResultSet mySet = Main.myStat.executeQuery("select passenger_id, baggage_id, weight, type " +
                     "from baggages, passengers where passengers.passport_no = baggages.passport_no");
             int rowCount = 0;
 
@@ -80,21 +113,21 @@ public class DeleteBaggage {
 
             while(mySet.next()){
                 for(int i=0; i<columns.length; i++) {
-                    data[j][i] = mySet.getObject(i + 1);
+                    data[j][i] = mySet.getObject(i+1);
                 }
                 j++;
-                firstName = mySet.getString("first_name");
-                lastName = mySet.getString("last_name");
+
 
             }
 
-
-            label.setText("Baggage " + baggage_id_to_query+ " is successfully deleted for " + firstName +" "+ lastName);
+            label.setText("Baggage " + baggage_id_to_query+ " is successfully deleted");
             panel.add(label);
 
 
             refreshTable();
         }catch(Exception e){
+            label.setText("Baggage Not Found");
+            panel.add(label);
             e.printStackTrace();
         }
     }
