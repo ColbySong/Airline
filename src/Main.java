@@ -81,7 +81,7 @@ public class Main {
         invalidPassportNoLabel = new JLabel();
         panel.add(invalidPassportNoLabel);
 
-        frame.setVisible(true);
+
 
 
         //admin login
@@ -104,7 +104,7 @@ public class Main {
                 }
             }
         });
-
+        frame.setVisible(true);
     }
 
     private static boolean isValidPassenger(String p) {

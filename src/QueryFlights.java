@@ -47,7 +47,7 @@ public class QueryFlights {
 
     private Object[][] data;
 
-    private List<String> filterColumns = new ArrayList<>();
+    private List<String> filterColumns = new ArrayList<String>();
 
     private String select_clause = "select ";
 
