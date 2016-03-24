@@ -130,9 +130,10 @@ public class Main {
         adminIdLoginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO: create new panel which will have actions that can be done by admin
+                panel.setVisible(false);
+                AdminPanel ap = new AdminPanel();
+                ap.init();
                 // TODO: create valid admin usernames
-
             }
         });
 
