@@ -7,16 +7,16 @@ import java.sql.ResultSet;
 /**
  * Created by yoonyok on 2016-03-24.
  */
-public class DeleteBaggage {
+public class DeletePassenger {
     private JPanel panel;
     private JLabel label = new JLabel();
     private JLabel label2 = new JLabel();
     private JLabel prompt;
-    private String baggage_id_to_query;
+    private String passenger_id_to_query;
     private JTable table;
     private Object[][] data;
     private JScrollPane scrollPane;
-    private String[] columns = new String[]{"Passenger ID", "Baggage ID","Weight", "Type"};
+    private String[] columns = new String[]{"First Name", "Last Name", "Passport No"};
     private JButton backButton;
 
 
@@ -27,12 +27,12 @@ public class DeleteBaggage {
 
 
         prompt = new JLabel();
-        prompt.setText("Please enter Baggage ID to delete");
+        prompt.setText("Please enter Passenger ID to delete");
         panel.add(prompt);
 
-        final JTextField baggage_id = new JTextField();
-        baggage_id.setPreferredSize(new Dimension(250,20));
-        panel.add(baggage_id);
+        final JTextField passenger_id = new JTextField();
+        passenger_id.setPreferredSize(new Dimension(250,20));
+        panel.add(passenger_id);
 
 
         JButton search = new JButton();
@@ -40,9 +40,9 @@ public class DeleteBaggage {
         search.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                baggage_id_to_query = baggage_id.getText();
+                passenger_id_to_query = passenger_id.getText();
                 try {
-                    deleteBaggage();
+                    deletePassenger();
                 }catch(Exception e1){
                     label.setText("Baggage Not Found");
                     panel.add(label);
@@ -52,9 +52,6 @@ public class DeleteBaggage {
             }
         });
         panel.add(search);
-
-
-
 
         backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
@@ -66,14 +63,14 @@ public class DeleteBaggage {
         });
         panel.add(backButton);
 
-        viewAllBaggages();
+        viewAllPassenger();
 
     }
 
-    private void viewAllBaggages() {
+    private void viewAllPassenger() {
         try{
-            ResultSet mySet = Main.myStat.executeQuery("select passenger_id, baggage_id, weight, type " +
-                    "from baggages  , passengers where passengers.passport_no = baggages.passport_no");
+            ResultSet mySet = Main.myStat.executeQuery("select first_name, last_name, passport_no  " +
+                    "from passengers");
 
             int rowCount = 0;
 
@@ -101,13 +98,14 @@ public class DeleteBaggage {
         }
     }
 
-    public void deleteBaggage() throws Exception{
+    public void deletePassenger() throws Exception{
 
             Main.myStat.executeUpdate(
-                    "Delete from baggages where baggage_id = " + baggage_id_to_query
+                    "Delete from passengers where passenger_id = " + passenger_id_to_query
             );
-            ResultSet mySet = Main.myStat.executeQuery("select passenger_id, baggage_id, weight, type " +
-                    "from baggages, passengers where passengers.passport_no = baggages.passport_no");
+            ResultSet mySet = Main.myStat.executeQuery("select first_name, last_name, passport_no  " +
+                    "from passengers");
+
             int rowCount = 0;
 
             if(mySet.last()){

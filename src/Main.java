@@ -97,7 +97,7 @@ public class Main {
         adminIdLoginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (adminIdLogin.getText().equals("j4w9a")) {
+                if (adminIdLogin.getText().equals("j4w9a")||adminIdLogin.getText().equals("p7x8")) {
                     panel.setVisible(false);
                     AdminPanel ap = new AdminPanel();
                     ap.init();

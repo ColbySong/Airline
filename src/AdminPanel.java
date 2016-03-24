@@ -59,6 +59,17 @@ public class AdminPanel {
             }
         });
 
+        JButton deletePassenger = new JButton(("Delete a Passenger"));
+        panel.add(deletePassenger);
+        deletePassenger.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.setVisible(false);
+                DeletePassenger dp = new DeletePassenger();
+                dp.init();
+            }
+        });
+
         JButton deleteBaggage = new JButton(("Delete a Baggage for a Passenger"));
         panel.add(deleteBaggage);
         deleteBaggage.addActionListener(new ActionListener() {
@@ -69,6 +80,7 @@ public class AdminPanel {
                 db.init();
             }
         });
+
 
 
         // search for passenger who booked all flights
