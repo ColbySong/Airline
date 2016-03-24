@@ -16,7 +16,7 @@ public class QueryFlights {
 
     private JComboBox departureAirportIDComboBox;
     private JComboBox arrivalAirportIDComboBox;
-    private JComboBox sortByComboBox;
+    //private JComboBox sortByComboBox;
 
     private JCheckBox arrivalAirportCB;
     private JCheckBox departingAirportCB;
@@ -37,34 +37,33 @@ public class QueryFlights {
 
     private JScrollPane scrollPane;
 
-    private JLabel flightDetailLabel;
-    private JLabel departureAirportLabel;
-    private JLabel arrivalAirportLabel;
-    private JLabel sortByLabel;
-
-    private JButton backButton;
-    private JButton filterButton;
-
-    private JTable table;
+    //private JLabel sortByLabel;
 
     private String[] columns = new String[] {
             "Flight Number", "Cost", "Depart From", "Departure Date", "Departure Time",
             "Arrive In", "Arrival Date", "Arrival Time", "Seats Remaining"};
-    private String[] sortByTypes = new String[] {
-            "- select filter -", "Arrival Date", "Departure Date", "Arrival Time", "Departure Time", "Cost"};
+    //private String[] sortByTypes = new String[] {
+            //"- select filter -", "Arrival Date", "Departure Date", "Arrival Time", "Departure Time", "Cost"};
 
     private Object[][] data;
 
-    private List<String> filterColumns = new ArrayList<String>();
+    private List<String> filterColumns = new ArrayList<>();
 
     private String select_clause = "select ";
+
     private String from_clause = "from flights ";
+
     private String where_clause = "";
-//    private String order_by = "";
+    private String arriving_airport = "";
+    private String selected_arrival = "";
+    private String departing_airport = "";
+    private String selected_departure = "";
+
+    //private String order_by = "";
 
     private Boolean select_triggered = false;
     private Boolean where_triggered = false;
-//    private Boolean orderby_triggered = false;
+    //private Boolean orderby_triggered = false;
 
     public void init() {
 
@@ -81,7 +80,7 @@ public class QueryFlights {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 0;
-        departureAirportLabel = new JLabel("Select Departing Airport");
+        JLabel departureAirportLabel = new JLabel("Select Departing Airport");
         panel.add(departureAirportLabel, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -92,7 +91,7 @@ public class QueryFlights {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Object selected = departureAirportIDComboBox.getSelectedItem();
-                formatWhereClause(selected, "airportid_depart");
+                setDASelected(selected);
             }
         });
         generateDepartureDropDown();
@@ -106,7 +105,7 @@ public class QueryFlights {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 2;
         c.gridy = 0;
-        arrivalAirportLabel = new JLabel("Select Arriving Airport");
+        JLabel arrivalAirportLabel = new JLabel("Select Arriving Airport");
         panel.add(arrivalAirportLabel, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -117,7 +116,7 @@ public class QueryFlights {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Object selected = arrivalAirportIDComboBox.getSelectedItem();
-                formatWhereClause(selected, "airportid_arrive");
+                setAASelected(selected);
             }
         });
         generateArrivalDropDown();
@@ -129,7 +128,7 @@ public class QueryFlights {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 5;
         c.gridy = 0;
-        backButton = new JButton("Back");
+        JButton backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -205,26 +204,6 @@ public class QueryFlights {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 2;
-        arrivalTimeCB = new JCheckBox("Arriving Time");
-        arrivalTimeCB.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (arrivalTimeCB.isSelected()) {
-                    isATChecked = true;
-                    filterColumns.add("Arrival Time");
-                    select_clause += "time_arrive, ";
-                } else {
-                    isATChecked = false;
-                    filterColumns.remove("Arrival Time");
-                    select_clause = select_clause.replace("time_arrive, ", "");
-                }
-            }
-        });
-        panel.add(arrivalTimeCB, c);
-
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 2;
-        c.gridy = 1;
         departingDateCB = new JCheckBox("Departing Date");
         departingDateCB.addActionListener(new ActionListener() {
             @Override
@@ -241,6 +220,26 @@ public class QueryFlights {
             }
         });
         panel.add(departingDateCB, c);
+
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 2;
+        c.gridy = 1;
+        arrivalTimeCB = new JCheckBox("Arriving Time");
+        arrivalTimeCB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (arrivalTimeCB.isSelected()) {
+                    isATChecked = true;
+                    filterColumns.add("Arrival Time");
+                    select_clause += "time_arrive, ";
+                } else {
+                    isATChecked = false;
+                    filterColumns.remove("Arrival Time");
+                    select_clause = select_clause.replace("time_arrive, ", "");
+                }
+            }
+        });
+        panel.add(arrivalTimeCB, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 2;
@@ -293,7 +292,7 @@ public class QueryFlights {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 4;
-        flightDetailLabel = new JLabel("All Flights");
+        JLabel flightDetailLabel = new JLabel("All Flights");
         panel.add(flightDetailLabel, c);
 
         /**
@@ -302,7 +301,7 @@ public class QueryFlights {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 5;
         c.gridy = 4;
-        filterButton = new JButton("Filter Search");
+        JButton filterButton = new JButton("Filter Search");
         filterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -396,21 +395,16 @@ public class QueryFlights {
 
     private void filterSearch() {
         String[] filterArray;
+
         formatSelectClause();
+        formatWhereClause();
+
         String sql = select_clause + from_clause + where_clause;
         System.out.println(sql);
-        select_clause = "select ";
-//        order_by = "";
         try {
             ResultSet filteredSet = Main.myStat.executeQuery(sql);
 
-            if (select_triggered) {
-                filterArray = Arrays.copyOf(filterColumns.toArray(), filterColumns.toArray().length, String[].class);
-            }
-            else {
-                filterArray = columns;
-            }
-
+            filterArray = selectOutputColumns();
 
             int rowCount = 0;
             if (filteredSet.last()) {
@@ -428,14 +422,30 @@ public class QueryFlights {
                 j++;
             }
             filterColumns.clear();
-            deselectAllCheckBoxes();
-            setAllCheckedToFalse();
+            resetSelectConditions();
             resetWhereConditions();
             refreshTable(filterArray);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private String[] selectOutputColumns() {
+        String[] filterArray;
+        if (select_triggered || where_triggered) {
+            if (select_triggered && where_triggered) {
+                filterArray = Arrays.copyOf(filterColumns.toArray(), filterColumns.toArray().length, String[].class);
+            } else if (select_triggered) {
+                filterArray = Arrays.copyOf(filterColumns.toArray(), filterColumns.toArray().length, String[].class);
+            } else {
+                filterArray = columns;
+            }
+        }
+        else {
+            filterArray = columns;
+        }
+        return filterArray;
     }
 
 
@@ -449,24 +459,15 @@ public class QueryFlights {
         }
     }
 
-    private void formatWhereClause(Object selected, String attr) {
-        String selectedAirport = selected.toString();
-        if (selectedAirport.equals("- select airport -")) {
-            System.out.println(where_clause);
-            where_triggered = false;
-            where_clause = "";
-            System.out.println(where_clause);
+    private void formatWhereClause() {
+        if (isAASelected && isDASelected) {
+            where_clause = "where " + arriving_airport + " = " + "\'" + selected_arrival + "\'" +
+                    " and " + departing_airport + " = " + "\'" + selected_departure + "\'";
+        } else if (isAASelected) {
+            where_clause = "where " + arriving_airport + " = " + "\'" + selected_arrival + "\'";
+        } else if (isDASelected) {
+            where_clause = "where " + departing_airport + " = " + "\'" + selected_departure + "\'";
         }
-        else {
-            where_triggered = true;
-            where_clause = "where ";
-            where_clause += buildWhereClause(selectedAirport, attr);
-            System.out.println(where_clause);
-        }
-    }
-
-    private String buildWhereClause(String selectedAirport, String attr) {
-        return attr + " = " + "\'" + selectedAirport + "\'";
     }
 
 //    private void formatOrderBy(Object selected) {
@@ -493,31 +494,20 @@ public class QueryFlights {
 //        }
 //    }
 
-    private void setSelectTrigger() {
-        if (isAAChecked || isDAChecked || isADChecked || isATChecked || isDDChecked || isDTChecked) {
-            select_triggered = true;
-        }
-        else {
-            select_triggered = false;
-        }
-    }
-
-    private void deselectAllCheckBoxes() {
+    private void resetSelectConditions() {
         arrivalAirportCB.setSelected(false);
         departingAirportCB.setSelected(false);
         arrivalDateCB.setSelected(false);
         arrivalTimeCB.setSelected(false);
         departingDateCB.setSelected(false);
         departingTimeCB.setSelected(false);
-    }
-
-    private void setAllCheckedToFalse() {
         isAAChecked = false;
         isADChecked = false;
         isATChecked = false;
         isDAChecked = false;
         isDDChecked = false;
         isDTChecked = false;
+        select_clause = "select ";
     }
 
     private void resetWhereConditions() {
@@ -536,10 +526,46 @@ public class QueryFlights {
         c.gridy = 5;
         c.gridwidth = 10;
         c.gridheight = 0;
-        table = new JTable(data, columnNames);
+        JTable table = new JTable(data, columnNames);
         scrollPane = new JScrollPane(table);
         panel.add(scrollPane, c);
         panel.revalidate();
         panel.repaint();
+    }
+
+    private void setSelectTrigger() {
+        select_triggered = isAAChecked || isDAChecked || isADChecked || isATChecked || isDDChecked || isDTChecked;
+    }
+
+    public void setDASelected(Object selected) {
+        String selectedString = selected.toString();
+        if (!selectedString.equals("- select airport -")) {
+            isDASelected = true;
+            where_triggered = true;
+            selected_departure = selectedString;
+            departing_airport = "airportid_depart";
+        }
+        else {
+            isDASelected = false;
+            where_triggered = false;
+            selected_departure = "";
+            departing_airport = "";
+        }
+    }
+
+    public void setAASelected(Object selected) {
+        String selectedString = selected.toString();
+        if (!selectedString.equals("- select airport -")) {
+            isAASelected = true;
+            where_triggered = true;
+            selected_arrival = selectedString;
+            arriving_airport = "airportid_arrive";
+        }
+        else {
+            isAASelected = false;
+            where_triggered = false;
+            selected_arrival = "";
+            arriving_airport = "";
+        }
     }
 }
