@@ -16,6 +16,7 @@ public class FlightReserver {
     private GridBagConstraints c;
 
     private JPanel panel;
+    private JLabel reservationAlert = new JLabel();
 
     private static int MINIMUM_SEATNO = 1;
     private static int MAXIMUM_CONFNO = Integer.MAX_VALUE;
@@ -25,7 +26,7 @@ public class FlightReserver {
     private int seatNumber = 0;
     private int confirmationNo;
     private String reservedFlightNo;
-    private String passportNo = "N239942";
+    private String passportNo = Passenger.passengerPassportNo;
     private String insertClause = "insert into reserves values";
 
     public void init(String reservedFlightNo) {
@@ -36,14 +37,15 @@ public class FlightReserver {
         panel.setLayout(new GridBagLayout());
         Main.frame.add(panel);
 
-        bookFlight();
+        if (isReserveValid()) {
+            bookFlight();
+        }
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 0;
         c.gridwidth = 5;
-        JLabel thankYouLabel = new JLabel("Thank you for reserving a flight!");
-        panel.add(thankYouLabel, c);
+        panel.add(reservationAlert, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
@@ -71,6 +73,25 @@ public class FlightReserver {
             }
         });
         panel.add(backButton, c);
+    }
+
+    private boolean isReserveValid() {
+        try {
+            ResultSet result = Main.myStat.executeQuery("select passport_no, flight_no from reserves where passport_no = "
+                    + "\'" + passportNo + "\'" + " and " + "flight_no = " + "\'" + reservedFlightNo + "\'");
+
+            if (result.isBeforeFirst() && result.next()
+                    && result.getString("passport_no").equals(passportNo) && result.getString("flight_no").equals(reservedFlightNo)) {
+                reservationAlert.setText("You have already booked this flight. Check your flights below!");
+                return false;
+            } else {
+                reservationAlert.setText("Thank you for reserving a flight!");
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public void bookFlight() {

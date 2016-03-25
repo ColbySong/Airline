@@ -37,6 +37,8 @@ public class QueryFlights {
     private JTextField reserveFlight;
     private String reservedFlightNo = "";
 
+    private JLabel invalidFlightNoLabel;
+
     private String[] columns = new String[] {
             "Flight Number", "Cost", "Depart From", "Departure Date", "Departure Time",
             "Arrive In", "Arrival Date", "Arrival Time", "Seats Remaining"};
@@ -55,6 +57,7 @@ public class QueryFlights {
 
     private Boolean select_triggered = false;
     private Boolean where_triggered = false;
+
 
     public void init() {
         panel = new JPanel();
@@ -287,7 +290,7 @@ public class QueryFlights {
          */
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = table.getRowHeight() + 5;
+        c.gridy = table.getRowHeight();
         c.gridwidth = 3;
         reserveFlight = new JTextField("Enter Flight Number...");
         panel.add(reserveFlight, c);
@@ -296,18 +299,24 @@ public class QueryFlights {
          * Reserve Flight Button
          */
         c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 5;
-        c.gridy = table.getRowHeight() + 5;
         JButton reserveButton = new JButton("Reserve Flight");
         reserveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 reservedFlightNo = reserveFlight.getText();
-                FlightReserver fr = new FlightReserver();
-                panel.setVisible(false);
-                fr.init(reservedFlightNo);
+                if (isFlightNoValid(reservedFlightNo)) {
+                    panel.setVisible(false);
+                    FlightReserver fr = new FlightReserver();
+                    fr.init(reservedFlightNo);
+                }
             }
         });
+        invalidFlightNoLabel = new JLabel();
+        c.gridx = 0;
+        c.gridy = table.getRowHeight() + 10;
+        panel.add(invalidFlightNoLabel, c);
+        c.gridx = 5;
+        c.gridy = table.getRowHeight();
         panel.add(reserveButton, c);
     }
 
@@ -495,6 +504,24 @@ public class QueryFlights {
         panel.add(scrollPane, c);
         panel.revalidate();
         panel.repaint();
+    }
+
+    private boolean isFlightNoValid(String reserved) {
+        try {
+            ResultSet result = Main.myStat.executeQuery("select flight_no from flights where flight_no = " + "\'" + reserved + "\'");
+
+            if (result.isBeforeFirst() && result.next() && result.getString("flight_no").equals(reserved)) {
+                invalidFlightNoLabel.setText("");
+                return true;
+            } else {
+                invalidFlightNoLabel.setText("Invalid flight number, please try again");
+                return false;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private void setSelectTrigger() {
