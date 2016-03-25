@@ -36,15 +36,16 @@ public class Passenger {
         JLabel loggedInLabel = new JLabel("You are logged in as " + passengerFirstName + " " + passengerLastName + "!");
         panel.add(loggedInLabel);
 
-        JButton logoutButton = new JButton("Logout");
-        logoutButton.addActionListener(new ActionListener() {
+        JButton searchFlightButton = new JButton("Search for Flights");
+        panel.add(searchFlightButton);
+        searchFlightButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 panel.setVisible(false);
-                Main.panel.setVisible(true);
+                QueryFlights qf = new QueryFlights();
+                qf.init();
             }
         });
-        panel.add(logoutButton);
 
         JButton myFlightsButton = new JButton("My Flights");
         myFlightsButton.addActionListener(new ActionListener() {
@@ -56,5 +57,16 @@ public class Passenger {
             }
         });
         panel.add(myFlightsButton);
+
+        JButton logoutButton = new JButton("Logout");
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.setVisible(false);
+                Main.panel.setVisible(true);
+            }
+        });
+        panel.add(logoutButton);
+
     }
 }

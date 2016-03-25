@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class QueryFlights {
-    private JPanel panel;
+    public static JPanel panel;
     private GridBagConstraints c;
 
     private JComboBox departureAirportIDComboBox;
@@ -126,7 +126,7 @@ public class QueryFlights {
             @Override
             public void actionPerformed(ActionEvent e) {
                 panel.setVisible(false);
-                Main.panel.setVisible(true);
+                Passenger.panel.setVisible(true);
             }
         });
         panel.add(backButton, c);

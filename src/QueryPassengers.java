@@ -50,7 +50,7 @@ public class QueryPassengers {
             @Override
             public void actionPerformed(ActionEvent e) {
                 panel.setVisible(false);
-                Main.panel.setVisible(true);
+                AdminPanel.panel.setVisible(true);
             }
         });
         panel.add(backButton);

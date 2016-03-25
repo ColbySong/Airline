@@ -24,7 +24,7 @@ public class AdminPanel {
 
 
         // back button
-        backButton = new JButton("Back");
+        backButton = new JButton("Logout");
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -89,6 +89,17 @@ public class AdminPanel {
                 panel.setVisible(false);
                 DeleteBlock dbb = new DeleteBlock();
                 dbb.init();
+            }
+        });
+
+        JButton searchPassengerButton = new JButton("Search for Passengers");
+        panel.add(searchPassengerButton);
+        searchPassengerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.setVisible(false);
+                QueryPassengers qp = new QueryPassengers();
+                qp.init();
             }
         });
 
