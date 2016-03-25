@@ -28,16 +28,6 @@ public class MyFlights {
         JLabel loggedInLabel = new JLabel("You are logged in as " + Passenger.passengerFirstName + " " + Passenger.passengerLastName + "!");
         panel.add(loggedInLabel);
 
-        JButton logoutButton = new JButton("Logout");
-        logoutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                panel.setVisible(false);
-                Main.panel.setVisible(true);
-            }
-        });
-        panel.add(logoutButton);
-
         JButton backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
             @Override
@@ -47,6 +37,16 @@ public class MyFlights {
             }
         });
         panel.add(backButton);
+
+        JButton logoutButton = new JButton("Logout");
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.setVisible(false);
+                Main.panel.setVisible(true);
+            }
+        });
+        panel.add(logoutButton);
 
         searchFlights(passportNo);
     }

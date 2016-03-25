@@ -20,19 +20,19 @@ public class QueryJoin2 {
     private String firstName;
     private String lastName;
 
-    public void init(){
+    public void init() {
         panel = new JPanel();
         panel.setLayout(new FlowLayout());
         Main.frame.add(panel);
 
 
         prompt = new JLabel();
-        prompt.setText("Please enter Passenger ID");
+        prompt.setText("Please enter Passport Number");
         panel.add(prompt);
 
-        final JTextField passenger_id = new JTextField();
-        passenger_id.setPreferredSize(new Dimension(250,20));
-        panel.add(passenger_id);
+        final JTextField passport_no = new JTextField();
+        passport_no.setPreferredSize(new Dimension(250, 20));
+        panel.add(passport_no);
 
 
         JButton search = new JButton();
@@ -40,13 +40,11 @@ public class QueryJoin2 {
         search.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                passport_no_to_query = passenger_id.getText();
+                passport_no_to_query = passport_no.getText();
                 searchReservedFlights();
             }
         });
         panel.add(search);
-
-
 
 
         backButton = new JButton("Back");
@@ -61,16 +59,17 @@ public class QueryJoin2 {
 
     }
 
-    public void searchReservedFlights(){
-        try{
+    public void searchReservedFlights() {
+        try {
             ResultSet mySet = Main.myStat.executeQuery(
                     "select flights.flight_no, confirmation_no, date_depart, " +
                             "time_depart, airportid_depart, first_name, last_name from reserves, " +
                             "flights, passengers where passengers.passport_no = reserves.passport_no AND " +
-                            passport_no_to_query +" = passengers.passenger_id AND reserves.flight_no = flights.flight_no" );
+                            "passengers.passport_no =" + "\'" + passport_no_to_query + "\'"
+                            + " AND reserves.flight_no = flights.flight_no");
             int rowCount = 0;
 
-            if(mySet.last()){
+            if (mySet.last()) {
                 rowCount = mySet.getRow();
                 mySet.beforeFirst();
             }
@@ -78,8 +77,8 @@ public class QueryJoin2 {
             data = new Object[rowCount][columns.length];
             int j = 0;
 
-            while(mySet.next()){
-                for(int i=0; i<columns.length; i++) {
+            while (mySet.next()) {
+                for (int i = 0; i < columns.length; i++) {
                     data[j][i] = mySet.getObject(i + 1);
                 }
                 j++;
@@ -88,12 +87,12 @@ public class QueryJoin2 {
 
             }
 
-            label.setText("Reserved Flight Info of Passenger "+ firstName + " " + lastName);
+            label.setText("Reserved Flight Info of Passenger " + firstName + " " + lastName);
             panel.add(label);
 
 
             refreshTable();
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
