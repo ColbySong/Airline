@@ -5,11 +5,12 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 
 /**
- * Created by Daniel on 2016-03-23.
+ * Created by BenGee on 2016-03-25.
  */
 public class MyFlights {
 
-    private static final String[] columns = new String[] {
+
+    private static final String[] columns = new String[]{
             "Flight Number", "Cost", "Depart From", "Departure Date", "Departure Time",
             "Arrive In", "Arrival Date", "Arrival Time", "Seat Number", "Confirmation Number"};
     private Object[][] data;
@@ -51,7 +52,7 @@ public class MyFlights {
     }
 
     private void searchFlights(Object selectedItem) {
-        try{
+        try {
             ResultSet mySet = Main.myStat.executeQuery("select flight_no, cost, airportid_depart, date_depart, time_depart, airportid_arrive, date_arrive, time_arrive, seat_no, confirmation_no from reserves natural join flights where passport_no = \"" + selectedItem + "\"");
 
             int rowCount = 0;
@@ -63,16 +64,15 @@ public class MyFlights {
             data = new Object[rowCount][columns.length];
             int j = 0;
 
-            while(mySet.next()){
+            while (mySet.next()) {
                 for (int i = 0; i < columns.length; i++) {
-                    data[j][i] = mySet.getObject(i+1);
+                    data[j][i] = mySet.getObject(i + 1);
                 }
                 j++;
             }
 
             refreshTable();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -89,3 +89,4 @@ public class MyFlights {
         panel.repaint();
     }
 }
+
