@@ -81,6 +81,17 @@ public class AdminPanel {
             }
         });
 
+        JButton deleteFlight = new JButton(("Delete a Flight"));
+        panel.add(deleteFlight);
+        deleteFlight.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.setVisible(false);
+                DeleteBlock dbb = new DeleteBlock();
+                dbb.init();
+            }
+        });
+
 
 
         // search for passenger who booked all flights
