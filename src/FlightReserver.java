@@ -52,7 +52,7 @@ public class FlightReserver {
         showFlights.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Passenger.MyFlights mf = new Passenger.MyFlights();
+                MyFlights mf = new MyFlights();
                 mf.init(passportNo);
                 panel.setVisible(false);
             }
