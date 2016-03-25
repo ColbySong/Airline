@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Created by yoonyok on 2016-03-24.
@@ -44,8 +45,8 @@ public class DeleteBlock {
                 try {
                     deleteFlight();
                 }catch(Exception e1){
-                    label.setText("Flight Not Found");
                     panel.add(label);
+                    label.setText("Flight cannot be deleted - has reservations");
                     e1.printStackTrace();
 
                 }
@@ -97,7 +98,7 @@ public class DeleteBlock {
         }
     }
 
-    public void deleteFlight() throws Exception{
+    public void deleteFlight() throws SQLException{
         System.out.println(flight_id_to_query);
             Main.myStat.executeUpdate(
                     "Delete from flights where flight_no = '" + flight_id_to_query + "'"
@@ -122,9 +123,8 @@ public class DeleteBlock {
                 j++;
 
             }
-
+            //label.setText("delete successful");
             refreshTable();
-
 
     }
 
