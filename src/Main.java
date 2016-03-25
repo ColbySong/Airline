@@ -81,8 +81,16 @@ public class Main {
         invalidPassportNoLabel = new JLabel();
         panel.add(invalidPassportNoLabel);
 
-
-
+        JButton createPassengerAccount = new JButton("Create Passenger Account");
+        createPassengerAccount.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.setVisible(false);
+                CreatePassenger cp = new CreatePassenger();
+                cp.init();
+            }
+        });
+        panel.add(createPassengerAccount);
 
         //admin login
         final JLabel adminLoginLabel = new JLabel("Login with your admin ID");
@@ -104,6 +112,7 @@ public class Main {
                 }
             }
         });
+
         frame.setVisible(true);
     }
 
