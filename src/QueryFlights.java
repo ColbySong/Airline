@@ -7,16 +7,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by Daniel on 2016-03-20.
- */
 public class QueryFlights {
     private JPanel panel;
     private GridBagConstraints c;
 
     private JComboBox departureAirportIDComboBox;
     private JComboBox arrivalAirportIDComboBox;
-    //private JComboBox sortByComboBox;
 
     private JCheckBox arrivalAirportCB;
     private JCheckBox departingAirportCB;
@@ -36,37 +32,31 @@ public class QueryFlights {
     private Boolean isDASelected = false;
 
     private JScrollPane scrollPane;
+    private JTable table;
 
-    //private JLabel sortByLabel;
+    private JTextField reserveFlight;
+    private String reservedFlightNo = "";
 
     private String[] columns = new String[] {
             "Flight Number", "Cost", "Depart From", "Departure Date", "Departure Time",
             "Arrive In", "Arrival Date", "Arrival Time", "Seats Remaining"};
-    //private String[] sortByTypes = new String[] {
-            //"- select filter -", "Arrival Date", "Departure Date", "Arrival Time", "Departure Time", "Cost"};
 
     private Object[][] data;
 
     private List<String> filterColumns = new ArrayList<String>();
 
     private String select_clause = "select ";
-
     private String from_clause = "from flights ";
-
     private String where_clause = "";
     private String arriving_airport = "";
     private String selected_arrival = "";
     private String departing_airport = "";
     private String selected_departure = "";
 
-    //private String order_by = "";
-
     private Boolean select_triggered = false;
     private Boolean where_triggered = false;
-    //private Boolean orderby_triggered = false;
 
     public void init() {
-
         panel = new JPanel();
         c = new GridBagConstraints();
         panel.setLayout(new GridBagLayout());
@@ -262,36 +252,11 @@ public class QueryFlights {
         panel.add(departingTimeCB, c);
 
         /**
-         * Sort by filter (group by ...)
-         */
-        // TODO: Possibly remove?
-
-//        c.fill = GridBagConstraints.HORIZONTAL;
-//        c.gridx = 4;
-//        c.gridy = 3;
-//        sortByLabel = new JLabel("Sort By: ");
-//        panel.add(sortByLabel, c);
-//
-//        c.fill = GridBagConstraints.HORIZONTAL;
-//        c.gridx = 5;
-//        c.gridy = 3;
-//        sortByComboBox = new JComboBox();
-//        sortByComboBox.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                Object selected = sortByComboBox.getSelectedItem();
-//                formatOrderBy(selected);
-//            }
-//        });
-//        generateSortByDropDown();
-//        panel.add(sortByComboBox, c);
-
-        /**
          * Flight Table Title with filter suffix
          */
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 4;
+        c.gridy = 5;
         JLabel flightDetailLabel = new JLabel("All Flights");
         panel.add(flightDetailLabel, c);
 
@@ -300,7 +265,7 @@ public class QueryFlights {
          */
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 5;
-        c.gridy = 4;
+        c.gridy = 3;
         JButton filterButton = new JButton("Filter Search");
         filterButton.addActionListener(new ActionListener() {
             @Override
@@ -316,6 +281,34 @@ public class QueryFlights {
         });
         panel.add(filterButton, c);
         displayAllFlightDetails();
+
+        /**
+         * Enter Flight Number Text Field
+         */
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = table.getRowHeight() + 5;
+        c.gridwidth = 3;
+        reserveFlight = new JTextField("Enter Flight Number...");
+        panel.add(reserveFlight, c);
+
+        /**
+         * Reserve Flight Button
+         */
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 5;
+        c.gridy = table.getRowHeight() + 5;
+        JButton reserveButton = new JButton("Reserve Flight");
+        reserveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                reservedFlightNo = reserveFlight.getText();
+                FlightReserver fr = new FlightReserver();
+                panel.setVisible(false);
+                fr.init(reservedFlightNo);
+            }
+        });
+        panel.add(reserveButton, c);
     }
 
     private void generateDepartureDropDown() {
@@ -360,12 +353,6 @@ public class QueryFlights {
             e.printStackTrace();
         }
     }
-
-//    private void generateSortByDropDown() {
-//        for (int i = 0; i < sortByTypes.length; i++) {
-//            sortByComboBox.addItem(sortByTypes[i]);
-//        }
-//    }
 
     private void displayAllFlightDetails() {
         try {
@@ -470,30 +457,6 @@ public class QueryFlights {
         }
     }
 
-//    private void formatOrderBy(Object selected) {
-//        String[] sortByAttr = new String[] {"", "date_arrive ", "date_depart ", "time_arrive ", "time_depart ", "cost "};
-//        String sortBy = selected.toString();
-//        int matchingStringIndex = 0;
-//
-//        if (sortBy.equals(sortByTypes[0])) {
-//            orderby_triggered = false;
-//        }
-//        else {
-//            orderby_triggered = true;
-//            for (int i = 1; i < sortByTypes.length; i++) {
-//                if (sortBy.equals(sortByTypes[i])) {
-//                    matchingStringIndex = i;
-//                    break;
-//                }
-//            }
-//        }
-//        if (orderby_triggered) {
-//            order_by += "order by ";
-//            order_by += sortByAttr[matchingStringIndex];
-//            order_by += "asc";
-//        }
-//    }
-
     private void resetSelectConditions() {
         arrivalAirportCB.setSelected(false);
         departingAirportCB.setSelected(false);
@@ -523,11 +486,12 @@ public class QueryFlights {
         }
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 5;
+        c.gridy = 6;
         c.gridwidth = 10;
-        c.gridheight = 0;
-        JTable table = new JTable(data, columnNames);
+        c.gridheight = 2;
+        table = new JTable(data, columnNames);
         scrollPane = new JScrollPane(table);
+        table.setPreferredScrollableViewportSize(table.getPreferredSize());
         panel.add(scrollPane, c);
         panel.revalidate();
         panel.repaint();
