@@ -2,13 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created by Daniel on 2016-03-24.
+ * Created by Daniel on 2016-03-25.
  */
-public class CreatePassenger {
+public class PassengerInfo {
 
     public static JPanel panel;
 
@@ -19,7 +18,7 @@ public class CreatePassenger {
     private JLabel passportNoErrorLabel;
     private JLabel firstNameErrorLabel;
     private JLabel lastNameErrorLabel;
-
+    private JLabel updateLabel;
 
     public void init() {
         panel = new JPanel();
@@ -29,7 +28,7 @@ public class CreatePassenger {
         JLabel passportNoLabel = new JLabel("Passport Number:");
         panel.add(passportNoLabel);
 
-        passportNoField = new JTextField(20);
+        passportNoField = new JTextField(Passenger.passengerPassportNo, 20);
         passportNoField.setSize(100, 10);
         panel.add(passportNoField);
 
@@ -39,7 +38,7 @@ public class CreatePassenger {
         JLabel firstNameLabel = new JLabel("First Name:");
         panel.add(firstNameLabel);
 
-        firstNameField = new JTextField(20);
+        firstNameField = new JTextField(Passenger.passengerFirstName, 20);
         firstNameField.setSize(100, 10);
         panel.add(firstNameField);
 
@@ -49,53 +48,55 @@ public class CreatePassenger {
         JLabel lastNameLabel = new JLabel("Last Name:");
         panel.add(lastNameLabel);
 
-        lastNameField = new JTextField(20);
+        lastNameField = new JTextField(Passenger.passengerLastName, 20);
         lastNameField.setSize(100, 10);
         panel.add(lastNameField);
 
         lastNameErrorLabel = new JLabel("");
         panel.add(lastNameErrorLabel);
 
-        JButton createPassengerButton = new JButton("Create Passenger Account");
-        createPassengerButton.addActionListener(new ActionListener() {
+        updateLabel = new JLabel("");
+        panel.add(updateLabel);
+
+        JButton updateInfoButton = new JButton("Update Information");
+        updateInfoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (isValid()) {
-                    createPassenger();
-                    panel.setVisible(false);
-                    Main.panel.setVisible(true);
+                    updatePassenger();
                 }
             }
         });
-        panel.add(createPassengerButton);
+        panel.add(updateInfoButton);
 
         JButton backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 panel.setVisible(false);
-                Main.panel.setVisible(true);
+                Passenger.panel.setVisible(true);
             }
         });
         panel.add(backButton);
+
+        JButton logoutButton = new JButton("Logout");
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.setVisible(false);
+                Main.panel.setVisible(true);
+            }
+        });
+        panel.add(logoutButton);
     }
 
-    private void createPassenger() {
+    private void updatePassenger() {
         String passportNo = passportNoField.getText();
         String firstName = firstNameField.getText();
         String lastName = lastNameField.getText();
 
         try {
-            int maxPassengerID = 0;
-            ResultSet mySet = Main.myStat.executeQuery("select max(passenger_id) as maxPID from passengers");
-
-            if (mySet.next()) {
-                maxPassengerID = mySet.getInt("maxPID");
-            }
-
-            if (maxPassengerID != 0) {
-                Main.myStat.executeUpdate("insert into passengers values ('" + passportNo + "', '" + (maxPassengerID + 1) + "', '" + firstName + "', '" + lastName + "')");
-            }
+            Main.myStat.executeUpdate("update passengers set passport_no = '" + passportNo + "', first_name = '" + firstName + "', last_name = '" + lastName + "' where passport_no = '" + Passenger.passengerPassportNo + "'");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -105,6 +106,7 @@ public class CreatePassenger {
         passportNoErrorLabel.setText("");
         firstNameErrorLabel.setText("");
         lastNameErrorLabel.setText("");
+        updateLabel.setText("");
 
         if (!passportNoField.getText().matches("([A-Z])\\d{6}") || passportNoField.getText().equals("") || firstNameField.getText().equals("") || lastNameField.getText().equals("")) {
             if (!passportNoField.getText().matches("([A-Z])\\d{6}")) {
@@ -123,26 +125,13 @@ public class CreatePassenger {
                 lastNameErrorLabel.setText("Please enter your last name.");
             }
 
+            updateLabel.setText("Unable to update your information.");
+
             return false;
         }
 
-        String passportNo = passportNoField.getText();
-        int count = 1;
+        updateLabel.setText("Update successful!");
 
-        try {
-            ResultSet mySet = Main.myStat.executeQuery("select count(*) as count from passengers where passport_no = '" + passportNo + "'");
-
-            if (mySet.next()) {
-                count = mySet.getInt("count");
-            }
-
-            return count == 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return false;
+        return true;
     }
-
-
 }
