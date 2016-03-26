@@ -1,11 +1,7 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.sql.*;
 
 /**
@@ -143,7 +139,7 @@ public class Main {
                 invalidPassportNoLabel.setText("");
                 return true;
             } else {
-                invalidPassportNoLabel.setText("Invalid passport number, please try again");
+                invalidPassportNoLabel.setText("Invalid passport number, please try again.");
                 return false;
             }
 
