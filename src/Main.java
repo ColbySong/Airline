@@ -103,7 +103,7 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (adminIdLogin.getText().equals("j4w9a") || adminIdLogin.getText().equals("p7x8")
-                        ||adminIdLogin.getText().equals("v5e0b")) {
+                        || adminIdLogin.getText().equals("v5e0b") || adminIdLogin.getText().equals("u3b9")) {
                     panel.setVisible(false);
                     AdminPanel ap = new AdminPanel();
                     ap.init();
