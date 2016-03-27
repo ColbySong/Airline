@@ -22,42 +22,79 @@ public class PassengerInfo {
 
     public void init() {
         panel = new JPanel();
-        panel.setLayout(new FlowLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        panel.setLayout(new GridBagLayout());
         Main.frame.add(panel);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 1;
         JLabel passportNoLabel = new JLabel("Passport Number:");
-        panel.add(passportNoLabel);
+        panel.add(passportNoLabel, c);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 1;
         passportNoField = new JTextField(Passenger.passengerPassportNo, 20);
         passportNoField.setSize(100, 10);
-        panel.add(passportNoField);
+        panel.add(passportNoField, c);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 2;
         passportNoErrorLabel = new JLabel("");
-        panel.add(passportNoErrorLabel);
+        passportNoErrorLabel.setForeground(Color.RED);
+        panel.add(passportNoErrorLabel, c);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 3;
         JLabel firstNameLabel = new JLabel("First Name:");
-        panel.add(firstNameLabel);
+        panel.add(firstNameLabel, c);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 3;
         firstNameField = new JTextField(Passenger.passengerFirstName, 20);
         firstNameField.setSize(100, 10);
-        panel.add(firstNameField);
+        panel.add(firstNameField, c);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 4;
         firstNameErrorLabel = new JLabel("");
-        panel.add(firstNameErrorLabel);
+        firstNameErrorLabel.setForeground(Color.RED);
+        panel.add(firstNameErrorLabel, c);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 5;
         JLabel lastNameLabel = new JLabel("Last Name:");
-        panel.add(lastNameLabel);
+        panel.add(lastNameLabel, c);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 5;
         lastNameField = new JTextField(Passenger.passengerLastName, 20);
         lastNameField.setSize(100, 10);
-        panel.add(lastNameField);
+        panel.add(lastNameField, c);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 6;
         lastNameErrorLabel = new JLabel("");
-        panel.add(lastNameErrorLabel);
+        lastNameErrorLabel.setForeground(Color.RED);
+        panel.add(lastNameErrorLabel, c);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 7;
         updateLabel = new JLabel("");
-        panel.add(updateLabel);
+        panel.add(updateLabel, c);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 8;
         JButton updateInfoButton = new JButton("Update Information");
         updateInfoButton.addActionListener(new ActionListener() {
             @Override
@@ -67,8 +104,11 @@ public class PassengerInfo {
                 }
             }
         });
-        panel.add(updateInfoButton);
+        panel.add(updateInfoButton, c);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 8;
         JButton backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
             @Override
@@ -77,8 +117,11 @@ public class PassengerInfo {
                 Passenger.panel.setVisible(true);
             }
         });
-        panel.add(backButton);
+        panel.add(backButton, c);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 2;
+        c.gridy = 8;
         JButton logoutButton = new JButton("Logout");
         logoutButton.addActionListener(new ActionListener() {
             @Override
@@ -87,7 +130,7 @@ public class PassengerInfo {
                 Main.panel.setVisible(true);
             }
         });
-        panel.add(logoutButton);
+        panel.add(logoutButton, c);
     }
 
     private void updatePassenger() {
@@ -125,11 +168,13 @@ public class PassengerInfo {
                 lastNameErrorLabel.setText("Please enter your last name.");
             }
 
+            updateLabel.setForeground(Color.RED);
             updateLabel.setText("Unable to update your information.");
 
             return false;
         }
 
+        updateLabel.setForeground(Color.BLACK);
         updateLabel.setText("Update successful!");
 
         return true;

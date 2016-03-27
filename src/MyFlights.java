@@ -17,12 +17,13 @@ public class MyFlights {
 
     private JPanel panel;
     private JScrollPane scrollPane;
-    private JTable table;
+    private GridBagConstraints c;
 
 
     public void init(String passportNo) {
         panel = new JPanel();
-        panel.setLayout(new FlowLayout());
+        c = new GridBagConstraints();
+        panel.setLayout(new GridBagLayout());
         Main.frame.add(panel);
 
         JLabel loggedInLabel = new JLabel("You are logged in as " + Passenger.passengerFirstName + " " + Passenger.passengerLastName + "!");
@@ -46,7 +47,7 @@ public class MyFlights {
                 Main.panel.setVisible(true);
             }
         });
-        panel.add(logoutButton);
+        panel.add(logoutButton,c);
 
         searchFlights(passportNo);
     }
@@ -82,9 +83,16 @@ public class MyFlights {
             panel.remove(scrollPane);
         }
 
-        table = new JTable(data, columns);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 6;
+        c.gridwidth = 10;
+        c.gridheight = 2;
+
+        JTable table = new JTable(data, columns);
         scrollPane = new JScrollPane(table);
-        panel.add(scrollPane);
+        table.setPreferredScrollableViewportSize(table.getPreferredSize());
+        panel.add(scrollPane, c);
         panel.revalidate();
         panel.repaint();
     }

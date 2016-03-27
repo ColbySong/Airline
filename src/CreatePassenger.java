@@ -23,39 +23,73 @@ public class CreatePassenger {
 
     public void init() {
         panel = new JPanel();
-        panel.setLayout(new FlowLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        panel.setLayout(new GridBagLayout());
         Main.frame.add(panel);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 1;
         JLabel passportNoLabel = new JLabel("Passport Number:");
-        panel.add(passportNoLabel);
+        panel.add(passportNoLabel, c);
 
-        passportNoField = new JTextField(20);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 1;
+        passportNoField = new JTextField(Passenger.passengerPassportNo, 20);
         passportNoField.setSize(100, 10);
-        panel.add(passportNoField);
+        panel.add(passportNoField, c);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 2;
         passportNoErrorLabel = new JLabel("");
-        panel.add(passportNoErrorLabel);
+        passportNoErrorLabel.setForeground(Color.RED);
+        panel.add(passportNoErrorLabel, c);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 3;
         JLabel firstNameLabel = new JLabel("First Name:");
-        panel.add(firstNameLabel);
+        panel.add(firstNameLabel, c);
 
-        firstNameField = new JTextField(20);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 3;
+        firstNameField = new JTextField(Passenger.passengerFirstName, 20);
         firstNameField.setSize(100, 10);
-        panel.add(firstNameField);
+        panel.add(firstNameField, c);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 4;
         firstNameErrorLabel = new JLabel("");
-        panel.add(firstNameErrorLabel);
+        firstNameErrorLabel.setForeground(Color.RED);
+        panel.add(firstNameErrorLabel, c);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 5;
         JLabel lastNameLabel = new JLabel("Last Name:");
-        panel.add(lastNameLabel);
+        panel.add(lastNameLabel, c);
 
-        lastNameField = new JTextField(20);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 5;
+        lastNameField = new JTextField(Passenger.passengerLastName, 20);
         lastNameField.setSize(100, 10);
-        panel.add(lastNameField);
+        panel.add(lastNameField, c);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 6;
         lastNameErrorLabel = new JLabel("");
-        panel.add(lastNameErrorLabel);
+        lastNameErrorLabel.setForeground(Color.RED);
+        panel.add(lastNameErrorLabel, c);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 7;
         JButton createPassengerButton = new JButton("Create Passenger Account");
         createPassengerButton.addActionListener(new ActionListener() {
             @Override
@@ -67,9 +101,12 @@ public class CreatePassenger {
                 }
             }
         });
-        panel.add(createPassengerButton);
+        panel.add(createPassengerButton, c);
 
-        JButton backButton = new JButton("Back");
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 7;
+        JButton backButton = new JButton("Cancel");
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -77,7 +114,7 @@ public class CreatePassenger {
                 Main.panel.setVisible(true);
             }
         });
-        panel.add(backButton);
+        panel.add(backButton, c);
     }
 
     private void createPassenger() {

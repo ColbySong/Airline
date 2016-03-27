@@ -30,7 +30,7 @@ public class Passenger {
         }
 
         panel = new JPanel();
-        panel.setLayout(new FlowLayout());
+        panel.setLayout(new GridBagLayout());
         Main.frame.add(panel);
 
         JLabel loggedInLabel = new JLabel("You are logged in as " + passengerFirstName + " " + passengerLastName + "!");

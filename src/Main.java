@@ -17,8 +17,6 @@ public class Main {
     private static JTextField adminIdLogin;
     private static JLabel invalidPassportNoLabel;
 
-    private static GridBagConstraints c;
-
     public static void main(String[] args) {
         try {
             Connection myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/airline", "root", "1234");
@@ -30,7 +28,7 @@ public class Main {
 
         frame = new JFrame("Airline");
         panel = new JPanel();
-        c = new GridBagConstraints();
+        GridBagConstraints c = new GridBagConstraints();
         panel.setLayout(new GridBagLayout());
         frame.add(panel);
         frame.pack();
@@ -75,6 +73,7 @@ public class Main {
         c.gridx = 1;
         c.gridy = 2;
         invalidPassportNoLabel = new JLabel();
+        invalidPassportNoLabel.setForeground(Color.RED);
         panel.add(invalidPassportNoLabel, c);
 
         /**
