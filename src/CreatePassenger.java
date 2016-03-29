@@ -36,7 +36,7 @@ public class CreatePassenger {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 1;
-        passportNoField = new JTextField(Passenger.passengerPassportNo, 20);
+        passportNoField = new JTextField(20);
         passportNoField.setSize(100, 10);
         panel.add(passportNoField, c);
 
@@ -56,7 +56,7 @@ public class CreatePassenger {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 3;
-        firstNameField = new JTextField(Passenger.passengerFirstName, 20);
+        firstNameField = new JTextField(20);
         firstNameField.setSize(100, 10);
         panel.add(firstNameField, c);
 
@@ -76,7 +76,7 @@ public class CreatePassenger {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 5;
-        lastNameField = new JTextField(Passenger.passengerLastName, 20);
+        lastNameField = new JTextField(20);
         lastNameField.setSize(100, 10);
         panel.add(lastNameField, c);
 
