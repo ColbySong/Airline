@@ -29,7 +29,7 @@ public class QueryJoin {
 
 
         prompt = new JLabel();
-        prompt.setText("Please enter Passenger ID");
+        prompt.setText("Please enter Passport Number");
         panel.add(prompt);
 
         final JTextField passenger_id = new JTextField();
@@ -67,11 +67,11 @@ public class QueryJoin {
     public void searchBaggages(){
         try{
             ResultSet mySet = Main.myStat.executeQuery(
-                    "select * from baggages, passengers where passengers.passport_no = baggages.passport_no AND "+
-                            passport_no_to_query +" = passengers.passenger_id");
+                    "select * from baggages, passengers where passengers.passport_no = baggages.passport_no AND " +
+                            "passengers.passport_no = " + "\'" + passport_no_to_query + "\'");
             int rowCount = 0;
 
-            if(mySet.last()){
+            if (mySet.last()){
                 rowCount = mySet.getRow();
                 mySet.beforeFirst();
             }
