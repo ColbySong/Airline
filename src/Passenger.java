@@ -17,7 +17,7 @@ public class Passenger {
     public static JPanel panel;
 
     public void init(String passportNo) {
-        this.passengerPassportNo = passportNo;
+        Passenger.passengerPassportNo = passportNo;
 
         try {
             ResultSet mySet = Main.myStat.executeQuery("select first_name, last_name from passengers where passport_no = \"" + passportNo + "\"");
@@ -30,7 +30,7 @@ public class Passenger {
         }
 
         panel = new JPanel();
-        panel.setLayout(new FlowLayout());
+        panel.setLayout(new GridBagLayout());
         Main.frame.add(panel);
 
         JLabel loggedInLabel = new JLabel("You are logged in as " + passengerFirstName + " " + passengerLastName + "!");
@@ -58,6 +58,17 @@ public class Passenger {
         });
         panel.add(myFlightsButton);
 
+        JButton updatePassengerButton = new JButton("My Info");
+        updatePassengerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PassengerInfo pi = new PassengerInfo();
+                pi.init();
+                panel.setVisible(false);
+            }
+        });
+        panel.add(updatePassengerButton);
+
         JButton logoutButton = new JButton("Logout");
         logoutButton.addActionListener(new ActionListener() {
             @Override
@@ -67,6 +78,5 @@ public class Passenger {
             }
         });
         panel.add(logoutButton);
-
     }
 }

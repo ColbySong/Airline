@@ -2,13 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created by Daniel on 2016-03-24.
+ * Created by Daniel on 2016-03-25.
  */
-public class CreatePassenger {
+public class PassengerInfo {
 
     public static JPanel panel;
 
@@ -19,7 +18,7 @@ public class CreatePassenger {
     private JLabel passportNoErrorLabel;
     private JLabel firstNameErrorLabel;
     private JLabel lastNameErrorLabel;
-
+    private JLabel updateLabel;
 
     public void init() {
         panel = new JPanel();
@@ -36,7 +35,7 @@ public class CreatePassenger {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 1;
-        passportNoField = new JTextField(20);
+        passportNoField = new JTextField(Passenger.passengerPassportNo, 20);
         passportNoField.setSize(100, 10);
         panel.add(passportNoField, c);
 
@@ -56,7 +55,7 @@ public class CreatePassenger {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 3;
-        firstNameField = new JTextField(20);
+        firstNameField = new JTextField(Passenger.passengerFirstName, 20);
         firstNameField.setSize(100, 10);
         panel.add(firstNameField, c);
 
@@ -76,7 +75,7 @@ public class CreatePassenger {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 5;
-        lastNameField = new JTextField(20);
+        lastNameField = new JTextField(Passenger.passengerLastName, 20);
         lastNameField.setSize(100, 10);
         panel.add(lastNameField, c);
 
@@ -88,51 +87,59 @@ public class CreatePassenger {
         panel.add(lastNameErrorLabel, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 0;
+        c.gridx = 1;
         c.gridy = 7;
-        JButton createPassengerButton = new JButton("Create Passenger Account");
-        createPassengerButton.addActionListener(new ActionListener() {
+        updateLabel = new JLabel("");
+        panel.add(updateLabel, c);
+
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 8;
+        JButton updateInfoButton = new JButton("Update Information");
+        updateInfoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (isValid()) {
-                    createPassenger();
-                    panel.setVisible(false);
-                    Main.panel.setVisible(true);
+                    updatePassenger();
                 }
             }
         });
-        panel.add(createPassengerButton, c);
+        panel.add(updateInfoButton, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
-        c.gridy = 7;
-        JButton backButton = new JButton("Cancel");
+        c.gridy = 8;
+        JButton backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.setVisible(false);
+                Passenger.panel.setVisible(true);
+            }
+        });
+        panel.add(backButton, c);
+
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 2;
+        c.gridy = 8;
+        JButton logoutButton = new JButton("Logout");
+        logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 panel.setVisible(false);
                 Main.panel.setVisible(true);
             }
         });
-        panel.add(backButton, c);
+        panel.add(logoutButton, c);
     }
 
-    private void createPassenger() {
+    private void updatePassenger() {
         String passportNo = passportNoField.getText();
         String firstName = firstNameField.getText();
         String lastName = lastNameField.getText();
 
         try {
-            int maxPassengerID = 0;
-            ResultSet mySet = Main.myStat.executeQuery("select max(passenger_id) as maxPID from passengers");
-
-            if (mySet.next()) {
-                maxPassengerID = mySet.getInt("maxPID");
-            }
-
-            if (maxPassengerID != 0) {
-                Main.myStat.executeUpdate("insert into passengers values ('" + passportNo + "', '" + (maxPassengerID + 1) + "', '" + firstName + "', '" + lastName + "')");
-            }
+            Main.myStat.executeUpdate("update passengers set passport_no = '" + passportNo + "', first_name = '" + firstName + "', last_name = '" + lastName + "' where passport_no = '" + Passenger.passengerPassportNo + "'");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -142,6 +149,7 @@ public class CreatePassenger {
         passportNoErrorLabel.setText("");
         firstNameErrorLabel.setText("");
         lastNameErrorLabel.setText("");
+        updateLabel.setText("");
 
         if (!passportNoField.getText().matches("([A-Z])\\d{6}") || passportNoField.getText().equals("") || firstNameField.getText().equals("") || lastNameField.getText().equals("")) {
             if (!passportNoField.getText().matches("([A-Z])\\d{6}")) {
@@ -160,26 +168,15 @@ public class CreatePassenger {
                 lastNameErrorLabel.setText("Please enter your last name.");
             }
 
+            updateLabel.setForeground(Color.RED);
+            updateLabel.setText("Unable to update your information.");
+
             return false;
         }
 
-        String passportNo = passportNoField.getText();
-        int count = 1;
+        updateLabel.setForeground(Color.BLACK);
+        updateLabel.setText("Update successful!");
 
-        try {
-            ResultSet mySet = Main.myStat.executeQuery("select count(*) as count from passengers where passport_no = '" + passportNo + "'");
-
-            if (mySet.next()) {
-                count = mySet.getInt("count");
-            }
-
-            return count == 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return false;
+        return true;
     }
-
-
 }

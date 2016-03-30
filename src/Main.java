@@ -1,11 +1,7 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.sql.*;
 
 /**
@@ -21,8 +17,6 @@ public class Main {
     private static JTextField adminIdLogin;
     private static JLabel invalidPassportNoLabel;
 
-    private static GridBagConstraints c;
-
     public static void main(String[] args) {
         try {
             Connection myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/airline", "root", "1234");
@@ -34,7 +28,7 @@ public class Main {
 
         frame = new JFrame("Airline");
         panel = new JPanel();
-        c = new GridBagConstraints();
+        GridBagConstraints c = new GridBagConstraints();
         panel.setLayout(new GridBagLayout());
         frame.add(panel);
         frame.pack();
@@ -79,6 +73,7 @@ public class Main {
         c.gridx = 1;
         c.gridy = 2;
         invalidPassportNoLabel = new JLabel();
+        invalidPassportNoLabel.setForeground(Color.RED);
         panel.add(invalidPassportNoLabel, c);
 
         /**
@@ -107,7 +102,7 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (adminIdLogin.getText().equals("j4w9a") || adminIdLogin.getText().equals("p7x8")
-                        ||adminIdLogin.getText().equals("v5e0b")) {
+                        || adminIdLogin.getText().equals("v5e0b") || adminIdLogin.getText().equals("u3b9")) {
                     panel.setVisible(false);
                     AdminPanel ap = new AdminPanel();
                     ap.init();
@@ -143,7 +138,7 @@ public class Main {
                 invalidPassportNoLabel.setText("");
                 return true;
             } else {
-                invalidPassportNoLabel.setText("Invalid passport number, please try again");
+                invalidPassportNoLabel.setText("Invalid passport number, please try again.");
                 return false;
             }
 
