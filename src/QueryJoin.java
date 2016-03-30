@@ -68,7 +68,7 @@ public class QueryJoin {
         try{
             ResultSet mySet = Main.myStat.executeQuery(
                     "select * from baggages, passengers where passengers.passport_no = baggages.passport_no AND "+
-                            passport_no_to_query +" = passengers.passenger_id");
+                            passport_no_to_query +" = passengers.passport_no");
             int rowCount = 0;
 
             if(mySet.last()){
