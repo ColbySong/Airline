@@ -27,7 +27,7 @@ public class DeletePassenger {
 
 
         prompt = new JLabel();
-        prompt.setText("Please enter Passenger ID to delete");
+        prompt.setText("Please enter Passport Number to delete");
         panel.add(prompt);
 
         final JTextField passenger_id = new JTextField();
@@ -44,7 +44,7 @@ public class DeletePassenger {
                 try {
                     deletePassenger();
                 }catch(Exception e1){
-                    label.setText("Baggage Not Found");
+                    label.setText("Passenger not found");
                     panel.add(label);
                     e1.printStackTrace();
 
@@ -92,7 +92,7 @@ public class DeletePassenger {
             }
             refreshTable();
         }catch(Exception e){
-            label.setText("Baggage Not Found");
+            label.setText("Passenger Not Found");
             panel.add(label);
             e.printStackTrace();
         }
@@ -101,8 +101,8 @@ public class DeletePassenger {
     public void deletePassenger() throws Exception{
 
             Main.myStat.executeUpdate(
-                    "Delete from passengers where passenger_id = " + passenger_id_to_query
-            );
+                    "Delete from passengers where passport_no = \"" + passenger_id_to_query + "\"");
+
             ResultSet mySet = Main.myStat.executeQuery("select first_name, last_name, passport_no  " +
                     "from passengers");
 

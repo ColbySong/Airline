@@ -67,8 +67,10 @@ public class QueryJoin {
     public void searchBaggages(){
         try{
             ResultSet mySet = Main.myStat.executeQuery(
+
                     "select * from baggages, passengers where passengers.passport_no = baggages.passport_no AND " +
                             "passengers.passport_no = " + "\'" + passport_no_to_query + "\'");
+
             int rowCount = 0;
 
             if (mySet.last()){
