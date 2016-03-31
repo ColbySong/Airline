@@ -11,8 +11,12 @@ public class QueryFlights {
     public static JPanel panel;
     private GridBagConstraints c;
 
+    private JLabel errorInFindLabel;
+
     private JComboBox departureAirportIDComboBox;
     private JComboBox arrivalAirportIDComboBox;
+    private JComboBox minMaxCB;
+    private JComboBox departingAPCB;
 
     private JCheckBox arrivalAirportCB;
     private JCheckBox departingAirportCB;
@@ -56,6 +60,8 @@ public class QueryFlights {
     private String selected_arrival = "";
     private String departing_airport = "";
     private String selected_departure = "";
+    private String minMaxSelection = "";
+    private String departingAPSelection = "";
 
     private Boolean select_triggered = false;
     private Boolean where_triggered = false;
@@ -260,23 +266,48 @@ public class QueryFlights {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 5;
-        JLabel findTheFlightLabel = new JLabel("Find the fight with the");
+        JLabel findTheFlightLabel = new JLabel("Find the flight with the");
         panel.add(findTheFlightLabel, c);
-        generatreMinMaxDropDown();
+        generateMinMaxDropDown();
         c.gridx = 2;
         JLabel findThePriceLabel = new JLabel("price departing from");
         panel.add(findThePriceLabel, c);
         generateDepartingDropDown();
+
+        /**
+         * Find Button for Price Search
+         */
         c.gridx = 5;
         JButton findButton = new JButton("Find");
+        findButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (priceSearchIsValid()) {
+                    resetErrorMessages();
+                    executePriceFindQuery();
+                }
+                else {
+                    errorInFindLabel.setText("Invalid Search. Please Try Again.");
+                }
+            }
+        });
         panel.add(findButton, c);
-        
+
+        /**
+         * Error Message for Find
+         */
+        c.gridx = GridBagConstraints.HORIZONTAL;
+        c.gridx = 3;
+        c.gridy = 6;
+        errorInFindLabel = new JLabel("");
+        panel.add(errorInFindLabel, c);
+
         /**
          * Flight Table Title with filter suffix
          */
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 6;
+        c.gridy = 7;
         JLabel flightDetailLabel = new JLabel("All Flights");
         panel.add(flightDetailLabel, c);
 
@@ -292,8 +323,10 @@ public class QueryFlights {
             public void actionPerformed(ActionEvent e) {
                 setSelectTrigger();
                 if (!select_triggered && !where_triggered) {
+                    resetErrorMessages();
                     displayAllFlightDetails();
                 } else {
+                    resetErrorMessages();
                     filterSearch();
                 }
             }
@@ -336,18 +369,82 @@ public class QueryFlights {
         panel.add(reserveButton, c);
     }
 
-    private void generateDepartingDropDown() {
-        c.gridx = 3;
-        JComboBox departingAP = new JComboBox();
-        for (String s : departingAirports) {
-            departingAP.addItem(s);
-        }
-        panel.add(departingAP, c);
+    private void resetErrorMessages() {
+        invalidFlightNoLabel.setText("");
+        errorInFindLabel.setText("");
     }
 
-    private void generatreMinMaxDropDown() {
+    private void executePriceFindQuery() {
+        try {
+            ResultSet results = Main.myStat.executeQuery("select flight_no, cost, airportid_depart, date_depart, " +
+                    "time_depart, airportid_arrive, date_arrive, time_arrive, available_seats " + from_clause +
+                    "where cost = (select " + minMaxSelection + from_clause + "where airportid_depart = " + "\'" +
+                    departingAPSelection + "\'" + ") " + "and airportid_depart = " + "\'" + departingAPSelection + "\'");
+
+            int rowCount = 0;
+            if (results.last()) {
+                rowCount = results.getRow();
+                results.beforeFirst();
+            }
+
+            data = new Object[rowCount][columns.length];
+            int j = 0;
+
+            while (results.next()) {
+                for (int i = 0; i < columns.length; i++) {
+                    data[j][i] = results.getObject(i + 1);
+                }
+                j++;
+            }
+            resetWhereConditions();
+            refreshTable(columns);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean priceSearchIsValid() {
+        return (!minMaxSelection.equals("") && !departingAPSelection.equals(""));
+    }
+
+    private void generateDepartingDropDown() {
+        c.gridx = 3;
+        departingAPCB = new JComboBox();
+        departingAPCB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(departingAPCB.getSelectedItem() != "- select airport -") {
+                    departingAPSelection = departingAPCB.getSelectedItem().toString();
+                }
+                else {
+                    departingAPSelection = "";
+                }
+            }
+        });
+        for (String s : departingAirports) {
+            departingAPCB.addItem(s);
+        }
+        panel.add(departingAPCB, c);
+    }
+
+    private void generateMinMaxDropDown() {
         c.gridx = 1;
-        JComboBox minMaxCB = new JComboBox();
+        minMaxCB = new JComboBox();
+        minMaxCB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (minMaxCB.getSelectedItem().equals("maximum")) {
+                    minMaxSelection = "MAX(cost) ";
+                }
+                else if (minMaxCB.getSelectedItem().equals("minimum")) {
+                    minMaxSelection = "MIN(cost) ";
+                }
+                else {
+                    minMaxSelection = "";
+                }
+            }
+        });
         minMaxCB.addItem("- select -");
         minMaxCB.addItem("maximum");
         minMaxCB.addItem("minimum");
@@ -430,7 +527,7 @@ public class QueryFlights {
         formatWhereClause();
 
         String sql = select_clause + from_clause + where_clause;
-        System.out.println(sql);
+        //System.out.println(sql);
         try {
             ResultSet filteredSet = Main.myStat.executeQuery(sql);
 
@@ -517,6 +614,8 @@ public class QueryFlights {
     }
 
     private void resetWhereConditions() {
+        minMaxCB.setSelectedIndex(0);
+        departingAPCB.setSelectedIndex(0);
         arrivalAirportIDComboBox.setSelectedIndex(0);
         departureAirportIDComboBox.setSelectedIndex(0);
         where_triggered = false;
@@ -529,7 +628,7 @@ public class QueryFlights {
         }
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 7;
+        c.gridy = 8;
         c.gridwidth = 10;
         c.gridheight = 2;
         table = new JTable(data, columnNames);
