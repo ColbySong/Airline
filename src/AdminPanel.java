@@ -151,6 +151,24 @@ public class AdminPanel {
         });
 
         /**
+         * CreateFlight Button
+         */
+
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 4;
+        c.gridy = 1;
+        JButton createFlight = new JButton("Create New Flight");
+        panel.add(createFlight, c);
+        createFlight.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.setVisible(false);
+                CreateFlight qf = new CreateFlight();
+                qf.init();
+            }
+        });
+
+        /**
          * Passenger Flight Title and Table
          */
         c.gridx = 0;
