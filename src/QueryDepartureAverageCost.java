@@ -24,7 +24,7 @@ public class QueryDepartureAverageCost {
         panel.setLayout(new FlowLayout());
         Main.frame.add(panel);
 
-        findAverageDepartingCost();
+        //findAverageDepartingCost();
 
         maxButton = new JButton("Most Expensive");
         maxButton.addActionListener(new ActionListener() {
