@@ -23,6 +23,17 @@ public class QueryDivision {
         panel.setLayout(new FlowLayout());
         Main.frame.add(panel);
 
+        JButton nestedAggregationButton = new JButton("Flight Cost Statistics");
+        panel.add(nestedAggregationButton);
+        nestedAggregationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.setVisible(false);
+                QueryNestedAggregation qn = new QueryNestedAggregation();
+                qn.init();
+            }
+        });
+
         JButton search = new JButton();
         search.setText("Find passenger who booked all flights");
         search.addActionListener(new ActionListener() {
