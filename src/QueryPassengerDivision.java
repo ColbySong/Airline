@@ -9,8 +9,8 @@ import java.sql.ResultSet;
  */
 
 // division query expressing
-public class QueryDivision {
-    private JPanel panel;
+public class QueryPassengerDivision {
+    static JPanel panel;
     private JLabel label = new JLabel();
     private JTable table;
     private Object[][] data;
@@ -54,6 +54,17 @@ public class QueryDivision {
             }
         });
         panel.add(search);
+
+        JButton SearchFlightButton = new JButton("Find flights booked by all passengers");
+        panel.add(SearchFlightButton);
+        SearchFlightButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.setVisible(false);
+                QueryFlightDivision qfd = new QueryFlightDivision();
+                qfd.init();
+            }
+        });
 
         backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {

@@ -79,7 +79,7 @@ public class AdminPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 panel.setVisible(false);
-                QueryDivision qd = new QueryDivision();
+                QueryPassengerDivision qd = new QueryPassengerDivision();
                 qd.init();
             }
         });
