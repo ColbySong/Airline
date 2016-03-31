@@ -23,14 +23,25 @@ public class QueryDivision {
         panel.setLayout(new FlowLayout());
         Main.frame.add(panel);
 
-        JButton nestedAggregationButton = new JButton("Flight Cost Statistics");
+        JButton nestedAggregationButton = new JButton("Departure Cost Statistics");
         panel.add(nestedAggregationButton);
         nestedAggregationButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 panel.setVisible(false);
-                QueryNestedAggregation qn = new QueryNestedAggregation();
+                QueryDepartureAverageCost qn = new QueryDepartureAverageCost();
                 qn.init();
+            }
+        });
+
+        JButton nestedAggregationTwoButton = new JButton("Arrival Cost Statistics");
+        panel.add(nestedAggregationTwoButton);
+        nestedAggregationTwoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.setVisible(false);
+                QueryArrivalAverageCost qa = new QueryArrivalAverageCost();
+                qa.init();
             }
         });
 
