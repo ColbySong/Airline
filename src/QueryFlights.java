@@ -46,6 +46,8 @@ public class QueryFlights {
     private Object[][] data;
 
     private List<String> filterColumns = new ArrayList<String>();
+    private List<String> departingAirports;
+    private List<String> arrivingAirports;
 
     private String select_clause = "select ";
     private String from_clause = "from flights ";
@@ -68,7 +70,6 @@ public class QueryFlights {
         /**
          * Departing Airport Dropdown (where airportid_depart = ...)
          */
-        // TODO: implement these where queries
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
@@ -93,7 +94,6 @@ public class QueryFlights {
         /**
          * Arriving Airport Dropdown (where airportid_arrive = ...)
          */
-        // TODO: implement these where queries
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 2;
@@ -255,11 +255,28 @@ public class QueryFlights {
         panel.add(departingTimeCB, c);
 
         /**
-         * Flight Table Title with filter suffix
+         * Aggregated Search for Price
          */
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 5;
+        JLabel findTheFlightLabel = new JLabel("Find the fight with the");
+        panel.add(findTheFlightLabel, c);
+        generatreMinMaxDropDown();
+        c.gridx = 2;
+        JLabel findThePriceLabel = new JLabel("price departing from");
+        panel.add(findThePriceLabel, c);
+        generateDepartingDropDown();
+        c.gridx = 5;
+        JButton findButton = new JButton("Find");
+        panel.add(findButton, c);
+        
+        /**
+         * Flight Table Title with filter suffix
+         */
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 6;
         JLabel flightDetailLabel = new JLabel("All Flights");
         panel.add(flightDetailLabel, c);
 
@@ -268,12 +285,11 @@ public class QueryFlights {
          */
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 5;
-        c.gridy = 3;
+        c.gridy = 2;
         JButton filterButton = new JButton("Filter Search");
         filterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO: implement requeryAll if no checkboxes are checked and filter button is pressed
                 setSelectTrigger();
                 if (!select_triggered && !where_triggered) {
                     displayAllFlightDetails();
@@ -320,21 +336,39 @@ public class QueryFlights {
         panel.add(reserveButton, c);
     }
 
+    private void generateDepartingDropDown() {
+        c.gridx = 3;
+        JComboBox departingAP = new JComboBox();
+        for (String s : departingAirports) {
+            departingAP.addItem(s);
+        }
+        panel.add(departingAP, c);
+    }
+
+    private void generatreMinMaxDropDown() {
+        c.gridx = 1;
+        JComboBox minMaxCB = new JComboBox();
+        minMaxCB.addItem("- select -");
+        minMaxCB.addItem("maximum");
+        minMaxCB.addItem("minimum");
+        panel.add(minMaxCB, c);
+    }
+
     private void generateDepartureDropDown() {
         try {
             ResultSet departureSet = Main.myStat.executeQuery("select airportid_depart from flights");
 
-            List<String> results = new ArrayList<String>();
-            results.add("- select airport -");
+            departingAirports = new ArrayList<String>();
+            departingAirports.add("- select airport -");
 
             while (departureSet.next()) {
                 String result = departureSet.getString("airportid_depart");
-                if (!results.contains(result)) {
-                    results.add(result);
+                if (!departingAirports.contains(result)) {
+                    departingAirports.add(result);
                 }
             }
-            for (int i = 0; i < results.size(); i++) {
-                departureAirportIDComboBox.addItem(results.get(i));
+            for (int i = 0; i < departingAirports.size(); i++) {
+                departureAirportIDComboBox.addItem(departingAirports.get(i));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -345,18 +379,18 @@ public class QueryFlights {
         try {
             ResultSet arrivalSet = Main.myStat.executeQuery("select airportid_arrive from flights");
 
-            List<String> results = new ArrayList<String>();
-            results.add("- select airport -");
+            arrivingAirports = new ArrayList<String>();
+            arrivingAirports.add("- select airport -");
 
             while (arrivalSet.next()) {
                 String result = arrivalSet.getString("airportid_arrive");
-                if (!results.contains(result)) {
-                    results.add(result);
+                if (!arrivingAirports.contains(result)) {
+                    arrivingAirports.add(result);
                 }
             }
 
-            for (int i = 0; i < results.size(); i++) {
-                arrivalAirportIDComboBox.addItem(results.get(i));
+            for (int i = 0; i < arrivingAirports.size(); i++) {
+                arrivalAirportIDComboBox.addItem(arrivingAirports.get(i));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -495,7 +529,7 @@ public class QueryFlights {
         }
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 6;
+        c.gridy = 7;
         c.gridwidth = 10;
         c.gridheight = 2;
         table = new JTable(data, columnNames);
