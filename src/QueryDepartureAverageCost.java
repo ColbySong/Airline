@@ -24,7 +24,7 @@ public class QueryDepartureAverageCost {
         panel.setLayout(new FlowLayout());
         Main.frame.add(panel);
 
-        //findAverageDepartingCost();
+        findAverageDepartingCost();
 
         maxButton = new JButton("Most Expensive");
         maxButton.addActionListener(new ActionListener() {
@@ -51,7 +51,7 @@ public class QueryDepartureAverageCost {
             @Override
             public void actionPerformed(ActionEvent e) {
                 panel.setVisible(false);
-                AdminPanel.panel.setVisible(true);
+                QueryPassengerDivision.panel.setVisible(true);
             }
         });
         panel.add(backButton);
@@ -91,7 +91,7 @@ public class QueryDepartureAverageCost {
     private void findMaxAverageDepartingCost() {
         try{
             ResultSet mySet = Main.myStat.executeQuery(
-                    "select airportid_depart, avg_cost from average_flight_cost as copy where avg_cost = (select Max(avg_cost) from average_flight_cost); ");
+                    "select airportid_depart, avg_cost from average_flight_cost as copy where avg_cost = (select Max(avg_cost) from average_flight_cost);");
             int rowCount = 0;
 
             if(mySet.last()){

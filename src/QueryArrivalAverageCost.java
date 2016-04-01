@@ -51,7 +51,7 @@ public class QueryArrivalAverageCost {
             @Override
             public void actionPerformed(ActionEvent e) {
                 panel.setVisible(false);
-                AdminPanel.panel.setVisible(true);
+                QueryPassengerDivision.panel.setVisible(true);
             }
         });
         panel.add(backButton);
