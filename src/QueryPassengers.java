@@ -50,7 +50,7 @@ public class QueryPassengers {
             @Override
             public void actionPerformed(ActionEvent e) {
                 panel.setVisible(false);
-                Main.panel.setVisible(true);
+                AdminPanel.panel.setVisible(true);
             }
         });
         panel.add(backButton);
@@ -58,7 +58,7 @@ public class QueryPassengers {
 
     private void query(Object selectedItem) {
         try{
-            ResultSet mySet = Main.myStat.executeQuery("select * from passengers where passport_no = \"" + selectedItem + "\"");
+            ResultSet mySet = Main.myStat.executeQuery("select * from passengers where passport_no = '" + selectedItem + "'");
             while(mySet.next()){
                 label.setText(mySet.getString("first_name") + " " + mySet.getString("last_name"));
             }

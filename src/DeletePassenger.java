@@ -1,5 +1,3 @@
-import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,20 +5,20 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 
 /**
- * Created by yoonyok on 2016-03-22.
+ * Created by yoonyok on 2016-03-24.
  */
-public class QueryJoin {
+public class DeletePassenger {
     private JPanel panel;
     private JLabel label = new JLabel();
+    private JLabel label2 = new JLabel();
     private JLabel prompt;
-    private String passport_no_to_query;
+    private String passenger_id_to_query;
     private JTable table;
     private Object[][] data;
     private JScrollPane scrollPane;
-    private String[] columns = new String[]{"Baggage ID", "Weight", "Type"};
+    private String[] columns = new String[]{"First Name", "Last Name", "Passport No"};
     private JButton backButton;
-    private String firstName;
-    private String lastName;
+
 
     public void init(){
         panel = new JPanel();
@@ -29,7 +27,7 @@ public class QueryJoin {
 
 
         prompt = new JLabel();
-        prompt.setText("Please enter Passport Number");
+        prompt.setText("Please enter Passport Number to delete");
         panel.add(prompt);
 
         final JTextField passenger_id = new JTextField();
@@ -38,19 +36,22 @@ public class QueryJoin {
 
 
         JButton search = new JButton();
-        search.setText("Search for Baggage Info");
+        search.setText("Delete");
         search.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                passport_no_to_query = passenger_id.getText();
-                searchBaggages();
-                System.out.println(passport_no_to_query);
+                passenger_id_to_query = passenger_id.getText();
+                try {
+                    deletePassenger();
+                }catch(Exception e1){
+                    label.setText("Passenger not found");
+                    panel.add(label);
+                    e1.printStackTrace();
+
+                }
             }
         });
         panel.add(search);
-
-
-
 
         backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
@@ -62,18 +63,18 @@ public class QueryJoin {
         });
         panel.add(backButton);
 
+        viewAllPassenger();
+
     }
 
-    public void searchBaggages(){
+    private void viewAllPassenger() {
         try{
-            ResultSet mySet = Main.myStat.executeQuery(
-
-                    "select * from baggages, passengers where passengers.passport_no = baggages.passport_no AND " +
-                            "passengers.passport_no = " + "\'" + passport_no_to_query + "\'");
+            ResultSet mySet = Main.myStat.executeQuery("select first_name, last_name, passport_no  " +
+                    "from passengers");
 
             int rowCount = 0;
 
-            if (mySet.last()){
+            if(mySet.last()){
                 rowCount = mySet.getRow();
                 mySet.beforeFirst();
             }
@@ -83,26 +84,49 @@ public class QueryJoin {
 
             while(mySet.next()){
                 for(int i=0; i<columns.length; i++) {
-                    data[j][i] = mySet.getObject(i + 1);
+                    data[j][i] = mySet.getObject(i+1);
                 }
                 j++;
-                firstName = mySet.getString("first_name");
-                lastName = mySet.getString("last_name");
+
+
+            }
+            refreshTable();
+        }catch(Exception e){
+            label.setText("Passenger Not Found");
+            panel.add(label);
+            e.printStackTrace();
+        }
+    }
+
+    public void deletePassenger() throws Exception{
+
+            Main.myStat.executeUpdate(
+                    "Delete from passengers where passport_no = \"" + passenger_id_to_query + "\"");
+
+            ResultSet mySet = Main.myStat.executeQuery("select first_name, last_name, passport_no  " +
+                    "from passengers");
+
+            int rowCount = 0;
+
+            if(mySet.last()){
+                rowCount = mySet.getRow();
+                mySet.beforeFirst();
+            }
+
+            data = new Object[rowCount][columns.length];
+            int j = 0;
+
+            while(mySet.next()){
+                for(int i=0; i<columns.length; i++) {
+                    data[j][i] = mySet.getObject(i+1);
+                }
+                j++;
 
             }
 
-            label.setText("Baggages Info of Passenger " + firstName + " " + lastName);
-            panel.add(label);
-
-
             refreshTable();
-        }catch(MySQLSyntaxErrorException e){
-            JLabel error = new JLabel();
-            error.setText("Please enter a valid Passenger ID");
-            panel.add(error);
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+
+
     }
 
     private void refreshTable() {
@@ -115,5 +139,4 @@ public class QueryJoin {
         panel.revalidate();
         panel.repaint();
     }
-
 }

@@ -28,75 +28,34 @@ public class Main {
 
         frame = new JFrame("Airline");
         panel = new JPanel();
-        panel.setLayout(new FlowLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        panel.setLayout(new GridBagLayout());
         frame.add(panel);
-        frame.setSize(700, 700);
+        frame.pack();
+        frame.setSize(800, 600);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JButton searchFlightButton = new JButton("Search for Flights");
-        panel.add(searchFlightButton);
-        searchFlightButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                panel.setVisible(false);
-                QueryFlights qf = new QueryFlights();
-                qf.init();
-            }
-        });
-
-        JButton searchPassengerDivisionButton = new JButton("Search for Passenger who booked all flights");
-        panel.add(searchPassengerDivisionButton);
-        searchPassengerDivisionButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                panel.setVisible(false);
-                QueryDivision qd = new QueryDivision();
-                qd.init();
-            }
-        });
-
-        JButton searchPassengerButton = new JButton("Search for Passengers");
-        panel.add(searchPassengerButton);
-        searchPassengerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                panel.setVisible(false);
-                QueryPassengers qp = new QueryPassengers();
-                qp.init();
-            }
-        });
-
-        JButton searchBaggagesForPassengerButton = new JButton(("Search for Baggages for a Passenger"));
-        panel.add(searchBaggagesForPassengerButton);
-        searchBaggagesForPassengerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                panel.setVisible(false);
-                QueryJoin qj = new QueryJoin();
-                qj.init();
-            }
-        });
-
-        JButton searchFlightsReservesPassenger = new JButton(("Search for Reserved Flights for a Passenger"));
-        panel.add(searchFlightsReservesPassenger);
-        searchFlightsReservesPassenger.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                panel.setVisible(false);
-                QueryJoin2 qj2 = new QueryJoin2();
-                qj2.init();
-            }
-        });
-
-        // passenger login
+        /**
+         * Passenger Login
+         */
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 1;
         JLabel loginLabel = new JLabel("Login with your Passport Number");
-        panel.add(loginLabel);
+        panel.add(loginLabel, c);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 1;
+        c.gridwidth = 5;
         passportNoLogin = new JTextField(20);
         passportNoLogin.setSize(100, 10);
-        panel.add(passportNoLogin);
+        panel.add(passportNoLogin, c);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 8;
+        c.gridy = 1;
         JButton loginAsPassengerButton = new JButton("Login as Passenger");
         loginAsPassengerButton.addActionListener(new ActionListener() {
             @Override
@@ -108,33 +67,67 @@ public class Main {
                 }
             }
         });
-        panel.add(loginAsPassengerButton);
+        panel.add(loginAsPassengerButton, c);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 2;
         invalidPassportNoLabel = new JLabel();
-        panel.add(invalidPassportNoLabel);
+        invalidPassportNoLabel.setForeground(Color.RED);
+        panel.add(invalidPassportNoLabel, c);
 
-        frame.setVisible(true);
+        /**
+         * Admin Login
+         */
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 3;
+        final JLabel adminLoginLabel = new JLabel("Login with your Admin ID");
+        panel.add(adminLoginLabel, c);
 
-
-        //admin login
-        final JLabel adminLoginLabel = new JLabel("Login with your admin ID");
-        panel.add(adminLoginLabel);
-
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 3;
+        c.gridwidth = 5;
         adminIdLogin = new JTextField(20);
         adminLoginLabel.setSize(100, 10);
-        panel.add(adminIdLogin);
+        panel.add(adminIdLogin, c);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 8;
+        c.gridy = 3;
         JButton adminIdLoginButton = new JButton("Login as Admin");
-        panel.add(adminIdLoginButton);
+        panel.add(adminIdLoginButton, c);
         adminIdLoginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO: create new panel which will have actions that can be done by admin
-                // TODO: create valid admin usernames
-
+                if (adminIdLogin.getText().equals("j4w9a") || adminIdLogin.getText().equals("p7x8")
+                        || adminIdLogin.getText().equals("v5e0b") || adminIdLogin.getText().equals("u3b9")) {
+                    panel.setVisible(false);
+                    AdminPanel ap = new AdminPanel();
+                    ap.init();
+                }
             }
         });
 
+        /**
+         * Create New Account
+         */
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 8;
+        c.gridy = 4;
+        JButton createPassengerAccount = new JButton("Create Passenger Account");
+        createPassengerAccount.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.setVisible(false);
+                CreatePassenger cp = new CreatePassenger();
+                cp.init();
+            }
+        });
+        panel.add(createPassengerAccount, c);
+
+        frame.setVisible(true);
     }
 
     private static boolean isValidPassenger(String p) {
@@ -145,7 +138,7 @@ public class Main {
                 invalidPassportNoLabel.setText("");
                 return true;
             } else {
-                invalidPassportNoLabel.setText("Invalid passport number, please try again");
+                invalidPassportNoLabel.setText("Invalid passport number, please try again.");
                 return false;
             }
 

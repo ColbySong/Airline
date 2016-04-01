@@ -14,13 +14,10 @@ public class Passenger {
     public static String passengerFirstName;
     public static String passengerLastName;
 
-    private JPanel panel;
-    private JButton logoutButton;
-    private JLabel loggedInLabel;
-
+    public static JPanel panel;
 
     public void init(String passportNo) {
-        this.passengerPassportNo = passportNo;
+        Passenger.passengerPassportNo = passportNo;
 
         try {
             ResultSet mySet = Main.myStat.executeQuery("select first_name, last_name from passengers where passport_no = \"" + passportNo + "\"");
@@ -33,13 +30,46 @@ public class Passenger {
         }
 
         panel = new JPanel();
-        panel.setLayout(new FlowLayout());
+        panel.setLayout(new GridBagLayout());
         Main.frame.add(panel);
 
-        loggedInLabel = new JLabel("You are logged in as " + passengerFirstName + " " + passengerLastName + "!");
+        JLabel loggedInLabel = new JLabel("You are logged in as " + passengerFirstName + " " + passengerLastName + "!");
         panel.add(loggedInLabel);
 
-        logoutButton = new JButton("Logout");
+        JButton searchFlightButton = new JButton("Search for Flights");
+        panel.add(searchFlightButton);
+        searchFlightButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.setVisible(false);
+                QueryFlights qf = new QueryFlights();
+                qf.init();
+            }
+        });
+
+        JButton myFlightsButton = new JButton("My Flights");
+        myFlightsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MyFlights mf = new MyFlights();
+                mf.init(passengerPassportNo);
+                panel.setVisible(false);
+            }
+        });
+        panel.add(myFlightsButton);
+
+        JButton updatePassengerButton = new JButton("My Info");
+        updatePassengerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PassengerInfo pi = new PassengerInfo();
+                pi.init();
+                panel.setVisible(false);
+            }
+        });
+        panel.add(updatePassengerButton);
+
+        JButton logoutButton = new JButton("Logout");
         logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
