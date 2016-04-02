@@ -47,7 +47,7 @@ public class AdminPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 panel.setVisible(false);
-                QueryJoin2 qj2 = new QueryJoin2();
+                QueryReservation qj2 = new QueryReservation();
                 qj2.init();
             }
         });
@@ -64,7 +64,7 @@ public class AdminPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 panel.setVisible(false);
-                QueryJoin qj = new QueryJoin();
+                QueryBaggageInfo qj = new QueryBaggageInfo();
                 qj.init();
             }
         });
@@ -148,7 +148,7 @@ public class AdminPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 panel.setVisible(false);
-                DeleteBlock dbb = new DeleteBlock();
+                DeleteFlight dbb = new DeleteFlight();
                 dbb.init();
             }
         });

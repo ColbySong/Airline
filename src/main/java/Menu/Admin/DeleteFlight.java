@@ -11,7 +11,7 @@ import java.sql.SQLException;
 /**
  * Created by yoonyok on 2016-03-24.
  */
-public class DeleteBlock {
+public class DeleteFlight {
     private JPanel panel;
     private JLabel label = new JLabel();
     private JLabel label2 = new JLabel();

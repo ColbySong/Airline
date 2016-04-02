@@ -19,7 +19,7 @@ public class DeleteBaggage {
     private JTable table;
     private Object[][] data;
     private JScrollPane scrollPane;
-    private String[] columns = new String[]{"Passenger ID", "Baggage ID","Weight", "Type"};
+    private String[] columns = new String[]{"First Name", "Last Name", "Passenger ID", "Baggage ID","Weight", "Type"};
     private JButton backButton;
 
 
@@ -75,7 +75,7 @@ public class DeleteBaggage {
 
     private void viewAllBaggages() {
         try{
-            ResultSet mySet = Main.myStat.executeQuery("select passenger_id, baggage_id, weight, type " +
+            ResultSet mySet = Main.myStat.executeQuery("select first_name, last_name, passenger_id, baggage_id, weight, type " +
                     "from baggages  , passengers where passengers.passport_no = baggages.passport_no");
 
             int rowCount = 0;
@@ -109,7 +109,7 @@ public class DeleteBaggage {
             Main.myStat.executeUpdate(
                     "Delete from baggages where baggage_id = " + baggage_id_to_query
             );
-            ResultSet mySet = Main.myStat.executeQuery("select passenger_id, baggage_id, weight, type " +
+            ResultSet mySet = Main.myStat.executeQuery("select first_name, last_name, passenger_id, baggage_id, weight, type " +
                     "from baggages, passengers where passengers.passport_no = baggages.passport_no");
             int rowCount = 0;
 
