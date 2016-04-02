@@ -1,3 +1,7 @@
+package main.java.Menu.User.Passenger;
+
+import main.java.Menu.*;
+import main.java.Menu.User.Flight.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
