@@ -1,9 +1,12 @@
+import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 /**
  * Created by Daniel on 2016-03-24.
@@ -24,6 +27,7 @@ public class CreateFlight {
     private JTextField time_arrive;
     private JLabel successMsg = new JLabel();
     private JLabel typeErrorMsg = new JLabel();
+    private JLabel flight_noErrorLabel = new JLabel();
     private GridBagConstraints c;
 
 
@@ -35,6 +39,7 @@ public class CreateFlight {
 
         successMsg.setVisible(false);
         typeErrorMsg.setVisible(false);
+        flight_noErrorLabel.setVisible(false);
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
@@ -129,7 +134,7 @@ public class CreateFlight {
 
         successMsg.setText("Flight Created Successfully");
         typeErrorMsg.setText("Please Enter a Valid Field");
-
+        flight_noErrorLabel.setText("Please Enter a Valid Flight Number");
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
@@ -143,8 +148,6 @@ public class CreateFlight {
                     successMsg.setVisible(false);
                     typeErrorMsg.setVisible(false);
                     createFlight();
-                    //successMsg.setVisible(true);
-
                 }
             }
         });
@@ -174,6 +177,11 @@ public class CreateFlight {
         c.gridy = -1;
         typeErrorMsg.setForeground(Color.RED);
         panel.add(typeErrorMsg, c);
+
+        c.gridx = 0;
+        c.gridy = -1;
+        flight_noErrorLabel.setForeground(Color.RED);
+        panel.add(flight_noErrorLabel, c);
     }
 
     private void createFlight() {
@@ -190,7 +198,7 @@ public class CreateFlight {
         try {
             Main.myStat.executeUpdate("insert into flights values(\"" + flightno + "\", "+ availSeat +"," + cost +", \""+airplaneID+"\", \""+aIDDepart+"\", \"" + aIDArrive +"\", \"" + dateDepart + "\", \"" + timeDepart + "\", \"" + dateArrive + "\", \"" + timeArrive +"\")");
             successMsg.setVisible(true);
-        } catch (SQLException e) {
+        }catch (SQLException e) {
             successMsg.setVisible(false);
             typeErrorMsg.setVisible(true);
             e.printStackTrace();
@@ -198,45 +206,12 @@ public class CreateFlight {
     }
 
     private boolean isValid() {
-//        dateTimeErrorLabel.setText("");
-//        firstNameErrorLabel.setText("");
-//        lastNameErrorLabel.setText("");
-//
-//        if (!passportNoField.getText().matches("([A-Z])\\d{6}") || passportNoField.getText().equals("") || firstNameField.getText().equals("") || lastNameField.getText().equals("")) {
-//            if (!passportNoField.getText().matches("([A-Z])\\d{6}")) {
-//                dateTimeErrorLabel.setText("Please enter a valid passport number (ie. A123456)");
-//            }
-//
-//            if (passportNoField.getText().equals("")) {
-//                dateTimeErrorLabel.setText("Please enter your passport number.");
-//            }
-//
-//            if (firstNameField.getText().equals("")) {
-//                firstNameErrorLabel.setText("Please enter your first name.");
-//            }
-//
-//            if (lastNameField.getText().equals("")) {
-//                lastNameErrorLabel.setText("Please enter your last name.");
-//            }
-//
-//            return false;
-//        }
-//
-//        String passportNo = passportNoField.getText();
-//        int count = 1;
-//
-//        try {
-//            ResultSet mySet = Main.myStat.executeQuery("select count(*) as count from passengers where passport_no = '" + passportNo + "'");
-//
-//            if (mySet.next()) {
-//                count = mySet.getInt("count");
-//            }
-//
-//            return count == 0;
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        flight_noErrorLabel.setVisible(false);
+        if (!flight_no.getText().matches("\\d{3}[A-Z]{3}")) {
 
+            flight_noErrorLabel.setVisible(true);
+            return false;
+        }
         return true;
     }
 
