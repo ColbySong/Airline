@@ -132,9 +132,9 @@ public class FlightReserver {
 
     private void generateValidSeatNo() {
         try {
-            ResultSet results = Main.myStat.executeQuery("select seat_no from reserves");
+            ResultSet results = Main.myStat.executeQuery("select seat_no from reserves where flight_no =" + "\'" + reservedFlightNo + "\'");
 
-            List<Integer> bookedSeats = new ArrayList<Integer>();
+            List<Integer> bookedSeats = new ArrayList<>();
             int i = 1;
 
             while (results.isBeforeFirst() && results.next()) {
@@ -158,9 +158,9 @@ public class FlightReserver {
 
     private void generateValidConfirmationNo() {
         try {
-            ResultSet results = Main.myStat.executeQuery("select confirmation_no from reserves");
+            ResultSet results = Main.myStat.executeQuery("select confirmation_no from reserves where flight_no =" + "\'" + reservedFlightNo + "\'");
 
-            List<Integer> confirmedNums = new ArrayList<Integer>();
+            List<Integer> confirmedNums = new ArrayList<>();
             int i = 1;
 
             while (results.isBeforeFirst() && results.next()) {
