@@ -1,26 +1,30 @@
+package main.java.Menu.Admin;
+
+import main.java.Menu.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created by Daniel on 2016-03-25.
+ * Created by Daniel on 2016-03-24.
  */
-public class PassengerInfo {
+public class CreatePassenger {
 
     public static JPanel panel;
 
     private JTextField passportNoField;
-    private JTextField passwordField;
     private JTextField firstNameField;
     private JTextField lastNameField;
+    private JTextField passwordField;
 
     private JLabel passportNoErrorLabel;
-    private JLabel passwordErrorLabel;
     private JLabel firstNameErrorLabel;
     private JLabel lastNameErrorLabel;
-    private JLabel updateLabel;
+    private JLabel passwordErrorLabel;
+
 
     public void init() {
         panel = new JPanel();
@@ -37,7 +41,7 @@ public class PassengerInfo {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 1;
-        passportNoField = new JTextField(Passenger.passportNo, 20);
+        passportNoField = new JTextField(20);
         passportNoField.setSize(100, 10);
         panel.add(passportNoField, c);
 
@@ -57,7 +61,7 @@ public class PassengerInfo {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 3;
-        passwordField = new JTextField(Passenger.password, 30);
+        passwordField = new JTextField(30);
         passwordField.setSize(100, 10);
         panel.add(passwordField, c);
 
@@ -77,7 +81,7 @@ public class PassengerInfo {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 5;
-        firstNameField = new JTextField(Passenger.firstName, 20);
+        firstNameField = new JTextField(20);
         firstNameField.setSize(100, 10);
         panel.add(firstNameField, c);
 
@@ -97,7 +101,7 @@ public class PassengerInfo {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 7;
-        lastNameField = new JTextField(Passenger.lastName, 20);
+        lastNameField = new JTextField(20);
         lastNameField.setSize(100, 10);
         panel.add(lastNameField, c);
 
@@ -109,62 +113,53 @@ public class PassengerInfo {
         panel.add(lastNameErrorLabel, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 1;
-        c.gridy = 9;
-        updateLabel = new JLabel("");
-        panel.add(updateLabel, c);
-
-        c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 10;
-        JButton updateInfoButton = new JButton("Update Information");
-        updateInfoButton.addActionListener(new ActionListener() {
+        c.gridy = 9;
+        JButton createPassengerButton = new JButton("Create Passenger Account");
+        createPassengerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (isValid()) {
-                    updatePassenger();
+                    createPassenger();
+                    panel.setVisible(false);
+                    Main.panel.setVisible(true);
                 }
             }
         });
-        panel.add(updateInfoButton, c);
+        panel.add(createPassengerButton, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
-        c.gridy = 10;
-        JButton backButton = new JButton("Back");
+        c.gridy = 9;
+        JButton backButton = new JButton("Cancel");
         backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                panel.setVisible(false);
-                Passenger.panel.setVisible(true);
-            }
-        });
-        panel.add(backButton, c);
-
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 2;
-        c.gridy = 10;
-        JButton logoutButton = new JButton("Logout");
-        logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 panel.setVisible(false);
                 Main.panel.setVisible(true);
             }
         });
-        panel.add(logoutButton, c);
+        panel.add(backButton, c);
     }
 
-    private void updatePassenger() {
+    private void createPassenger() {
         String passportNo = passportNoField.getText();
-        String password = passwordField.getText();
         String firstName = firstNameField.getText();
         String lastName = lastNameField.getText();
+        String password = passwordField.getText();
 
         try {
-            Main.myStat.executeUpdate("update passengers set passport_no = '" + passportNo
-                    + "', password = '" + password + "', first_name = '" + firstName + "', last_name = '"
-                    + lastName + "' where passport_no = '" + Passenger.passportNo + "'");
+            int maxPassengerID = 0;
+            ResultSet mySet = Main.myStat.executeQuery("select max(passenger_id) as maxPID from passengers");
+
+            if (mySet.next()) {
+                maxPassengerID = mySet.getInt("maxPID");
+            }
+
+            if (maxPassengerID != 0) {
+                Main.myStat.executeUpdate("insert into passengers values ('" + passportNo + "', '" + (maxPassengerID + 1)
+                        + "', '" + firstName + "', '" + lastName + "', '" + password + "')");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -172,13 +167,13 @@ public class PassengerInfo {
 
     private boolean isValid() {
         passportNoErrorLabel.setText("");
+        passwordErrorLabel.setText("");
         firstNameErrorLabel.setText("");
         lastNameErrorLabel.setText("");
-        updateLabel.setText("");
 
-        if (!passportNoField.getText().matches("([A-Z])\\d{6}") || passportNoField.getText().equals("")
-                || passwordField.getText().equals("") || firstNameField.getText().equals("")
-                || lastNameField.getText().equals("")) {
+        if (!passportNoField.getText().matches("([A-Z])\\d{6}") || passportNoField.getText().equals("") ||
+                passwordField.getText().equals("") || firstNameField.getText().equals("") ||
+                lastNameField.getText().equals("")) {
             if (!passportNoField.getText().matches("([A-Z])\\d{6}")) {
                 passportNoErrorLabel.setText("Please enter a valid passport number (ie. A123456)");
             }
@@ -199,15 +194,26 @@ public class PassengerInfo {
                 lastNameErrorLabel.setText("Please enter your last name.");
             }
 
-            updateLabel.setForeground(Color.RED);
-            updateLabel.setText("Unable to update your information.");
-
             return false;
         }
 
-        updateLabel.setForeground(Color.BLACK);
-        updateLabel.setText("Update successful!");
+        String passportNo = passportNoField.getText();
+        int count = 1;
 
-        return true;
+        try {
+            ResultSet mySet = Main.myStat.executeQuery("select count(*) as count from passengers where passport_no = '" + passportNo + "'");
+
+            if (mySet.next()) {
+                count = mySet.getInt("count");
+            }
+
+            return count == 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
+
+
 }

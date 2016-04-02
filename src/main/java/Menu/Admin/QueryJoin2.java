@@ -1,5 +1,6 @@
-import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
+package main.java.Menu.Admin;
 
+import main.java.Menu.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,7 +10,7 @@ import java.sql.ResultSet;
 /**
  * Created by yoonyok on 2016-03-22.
  */
-public class QueryJoin {
+public class QueryJoin2 {
     private JPanel panel;
     private JLabel label = new JLabel();
     private JLabel prompt;
@@ -17,12 +18,12 @@ public class QueryJoin {
     private JTable table;
     private Object[][] data;
     private JScrollPane scrollPane;
-    private String[] columns = new String[]{"Baggage ID", "Weight", "Type"};
+    private String[] columns = new String[]{"Flight No", "Confirmation No", "Date Depart", "Time Depart", "Airport Depart"};
     private JButton backButton;
     private String firstName;
     private String lastName;
 
-    public void init(){
+    public void init() {
         panel = new JPanel();
         panel.setLayout(new FlowLayout());
         Main.frame.add(panel);
@@ -32,24 +33,21 @@ public class QueryJoin {
         prompt.setText("Please enter Passport Number");
         panel.add(prompt);
 
-        final JTextField passenger_id = new JTextField();
-        passenger_id.setPreferredSize(new Dimension(250,20));
-        panel.add(passenger_id);
+        final JTextField passport_no = new JTextField();
+        passport_no.setPreferredSize(new Dimension(250, 20));
+        panel.add(passport_no);
 
 
         JButton search = new JButton();
-        search.setText("Search for Baggage Info");
+        search.setText("Search for Researved Flight Info");
         search.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                passport_no_to_query = passenger_id.getText();
-                searchBaggages();
-                System.out.println(passport_no_to_query);
+                passport_no_to_query = passport_no.getText();
+                searchReservedFlights();
             }
         });
         panel.add(search);
-
-
 
 
         backButton = new JButton("Back");
@@ -64,16 +62,17 @@ public class QueryJoin {
 
     }
 
-    public void searchBaggages(){
-        try{
+    public void searchReservedFlights() {
+        try {
             ResultSet mySet = Main.myStat.executeQuery(
-
-                    "select * from baggages, passengers where passengers.passport_no = baggages.passport_no AND " +
-                            "passengers.passport_no = " + "\'" + passport_no_to_query + "\'");
-
+                    "select flights.flight_no, confirmation_no, date_depart, " +
+                            "time_depart, airportid_depart, first_name, last_name from reserves, " +
+                            "flights, passengers where passengers.passport_no = reserves.passport_no AND " +
+                            "passengers.passport_no =" + "\'" + passport_no_to_query + "\'"
+                            + " AND reserves.flight_no = flights.flight_no");
             int rowCount = 0;
 
-            if (mySet.last()){
+            if (mySet.last()) {
                 rowCount = mySet.getRow();
                 mySet.beforeFirst();
             }
@@ -81,8 +80,8 @@ public class QueryJoin {
             data = new Object[rowCount][columns.length];
             int j = 0;
 
-            while(mySet.next()){
-                for(int i=0; i<columns.length; i++) {
+            while (mySet.next()) {
+                for (int i = 0; i < columns.length; i++) {
                     data[j][i] = mySet.getObject(i + 1);
                 }
                 j++;
@@ -91,16 +90,12 @@ public class QueryJoin {
 
             }
 
-            label.setText("Baggages Info of Passenger " + firstName + " " + lastName);
+            label.setText("Reserved Flight Info of Passenger " + firstName + " " + lastName);
             panel.add(label);
 
 
             refreshTable();
-        }catch(MySQLSyntaxErrorException e){
-            JLabel error = new JLabel();
-            error.setText("Please enter a valid Passenger ID");
-            panel.add(error);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
