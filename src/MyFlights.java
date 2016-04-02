@@ -26,7 +26,7 @@ public class MyFlights {
         panel.setLayout(new GridBagLayout());
         Main.frame.add(panel);
 
-        JLabel loggedInLabel = new JLabel("You are logged in as " + Passenger.passengerFirstName + " " + Passenger.passengerLastName + "!");
+        JLabel loggedInLabel = new JLabel("You are logged in as " + Passenger.firstName + " " + Passenger.lastName + "!");
         panel.add(loggedInLabel);
 
         JButton backButton = new JButton("Back");

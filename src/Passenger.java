@@ -10,20 +10,22 @@ import java.sql.SQLException;
  */
 public class Passenger {
 
-    public static String passengerPassportNo;
-    public static String passengerFirstName;
-    public static String passengerLastName;
+    public static String passportNo;
+    public static String firstName;
+    public static String lastName;
+    public static String password;
 
     public static JPanel panel;
 
     public void init(String passportNo) {
-        Passenger.passengerPassportNo = passportNo;
+        Passenger.passportNo = passportNo;
 
         try {
-            ResultSet mySet = Main.myStat.executeQuery("select first_name, last_name from passengers where passport_no = \"" + passportNo + "\"");
+            ResultSet mySet = Main.myStat.executeQuery("select first_name, last_name, password from passengers where passport_no = \"" + passportNo + "\"");
             if (mySet.next()) {
-                passengerFirstName = mySet.getString("first_name");
-                passengerLastName = mySet.getString("last_name");
+                firstName = mySet.getString("first_name");
+                lastName = mySet.getString("last_name");
+                password = mySet.getString("password");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -33,7 +35,7 @@ public class Passenger {
         panel.setLayout(new GridBagLayout());
         Main.frame.add(panel);
 
-        JLabel loggedInLabel = new JLabel("You are logged in as " + passengerFirstName + " " + passengerLastName + "!");
+        JLabel loggedInLabel = new JLabel("You are logged in as " + firstName + " " + lastName + "!");
         panel.add(loggedInLabel);
 
         JButton searchFlightButton = new JButton("Search for Flights");
@@ -52,7 +54,7 @@ public class Passenger {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MyFlights mf = new MyFlights();
-                mf.init(passengerPassportNo);
+                mf.init(Passenger.passportNo);
                 panel.setVisible(false);
             }
         });

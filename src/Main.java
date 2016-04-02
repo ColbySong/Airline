@@ -14,8 +14,11 @@ public class Main {
     public static JPanel panel;
 
     private static JTextField passportNoLogin;
+    private static JPasswordField passwordField;
     private static JTextField adminIdLogin;
+
     private static JLabel invalidPassportNoLabel;
+    private static JLabel invalidPasswordLabel;
 
     public static void main(String[] args) {
         try {
@@ -53,6 +56,14 @@ public class Main {
         passportNoLogin.setSize(100, 10);
         panel.add(passportNoLogin, c);
 
+        // TODO: UI
+        JLabel passwordLabel = new JLabel("Password");
+        panel.add(passwordLabel);
+
+        // TODO: UI
+        passwordField = new JPasswordField(30);
+        panel.add(passwordField);
+
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 8;
         c.gridy = 1;
@@ -60,7 +71,7 @@ public class Main {
         loginAsPassengerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (isValidPassenger(passportNoLogin.getText())) {
+                if (isValidLogin(passportNoLogin.getText(), passwordField.getPassword())) {
                     panel.setVisible(false);
                     Passenger p = new Passenger();
                     p.init(passportNoLogin.getText());
@@ -75,6 +86,11 @@ public class Main {
         invalidPassportNoLabel = new JLabel();
         invalidPassportNoLabel.setForeground(Color.RED);
         panel.add(invalidPassportNoLabel, c);
+
+        // TODO: UI
+        invalidPasswordLabel = new JLabel();
+        invalidPasswordLabel.setForeground(Color.RED);
+        panel.add(invalidPasswordLabel);
 
         /**
          * Admin Login
@@ -130,16 +146,25 @@ public class Main {
         frame.setVisible(true);
     }
 
-    private static boolean isValidPassenger(String p) {
+    private static boolean isValidLogin(String passportNo, char[] password) {
         try {
-            ResultSet mySet = Main.myStat.executeQuery("select passport_no from passengers where passport_no = \"" + p + "\"");
+            ResultSet mySet = Main.myStat.executeQuery("select passport_no, password from passengers where passport_no = \"" + passportNo + "\"");
 
-            if (mySet.isBeforeFirst() && mySet.next() && mySet.getString("passport_no").equals(p)) {
-                invalidPassportNoLabel.setText("");
-                return true;
-            } else {
-                invalidPassportNoLabel.setText("Invalid passport number, please try again.");
-                return false;
+            if (mySet.isBeforeFirst() && mySet.next()) {
+                if (mySet.getString("passport_no").equals(passportNo) && mySet.getString("password").equals(new String(password))) {
+                    invalidPassportNoLabel.setText("");
+                    invalidPasswordLabel.setText("");
+                    return true;
+                } else {
+                    if (!mySet.getString("passport_no").equals(passportNo)) {
+                        invalidPassportNoLabel.setText("Invalid passport number, please try again.");
+                        return false;
+                    }
+                    if (!mySet.getString("password").equals(new String(password))) {
+                        invalidPasswordLabel.setText("Incorrect password, please try again.");
+                    }
+                    return false;
+                }
             }
 
         } catch (SQLException e) {

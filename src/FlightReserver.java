@@ -26,7 +26,7 @@ public class FlightReserver {
     private int seatNumber = 0;
     private int confirmationNo;
     private String reservedFlightNo;
-    private String passportNo = Passenger.passengerPassportNo;
+    private String passportNo = Passenger.passportNo;
     private String insertClause = "insert into reserves values";
 
     public void init(String reservedFlightNo) {
