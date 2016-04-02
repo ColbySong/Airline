@@ -1,3 +1,6 @@
+package main.java.Menu.Admin;
+
+import main.java.Menu.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -5,15 +8,15 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 
 /**
- * Created by Colby on 2016-03-31.
+ * Created by Colby on 2016-03-30.
  */
-public class QueryArrivalAverageCost {
+public class QueryDepartureAverageCost {
     private JPanel panel;
     private JLabel label = new JLabel();
     private JTable table;
     private Object[][] data;
     private JScrollPane scrollPane;
-    private String[] columns = new String[]{"Arrival AirportID", "Average Cost"};
+    private String[] columns = new String[]{"Departing AirportID", "Average Cost"};
     private JButton backButton;
     private JButton maxButton;
     private JButton minButton;
@@ -39,7 +42,7 @@ public class QueryArrivalAverageCost {
         minButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                findMinAverageArrivalCost();
+                findMinAverageDepartingCost();
 
             }
         });
@@ -58,10 +61,10 @@ public class QueryArrivalAverageCost {
 
     }
 
-    private void findMinAverageArrivalCost() {
+    private void findMinAverageDepartingCost() {
         try{
             ResultSet mySet = Main.myStat.executeQuery(
-                    "select airportid_arrive, avg_cost from average_flight_cost as copy where avg_cost = (select Min(avg_cost) from average_flight_cost); ");
+                    "select airportid_depart, avg_cost from average_flight_cost as copy where avg_cost = (select Min(avg_cost) from average_flight_cost); ");
             int rowCount = 0;
 
             if(mySet.last()){
@@ -91,7 +94,7 @@ public class QueryArrivalAverageCost {
     private void findMaxAverageDepartingCost() {
         try{
             ResultSet mySet = Main.myStat.executeQuery(
-                    "select airportid_arrive, avg_cost from average_flight_cost as copy where avg_cost = (select Max(avg_cost) from average_flight_cost); ");
+                    "select airportid_depart, avg_cost from average_flight_cost as copy where avg_cost = (select Max(avg_cost) from average_flight_cost);");
             int rowCount = 0;
 
             if(mySet.last()){
@@ -120,7 +123,7 @@ public class QueryArrivalAverageCost {
 
     public void findAverageDepartingCost(){
         try{
-            Main.myStat.executeUpdate("CREATE or replace VIEW average_flight_cost as select airportid_arrive, AVG(cost) as avg_cost from flights group by airportid_arrive;");
+            Main.myStat.executeUpdate("CREATE or replace VIEW average_flight_cost as select airportid_depart, AVG(cost) as avg_cost from flights group by airportid_depart;");
             ResultSet mySet = Main.myStat.executeQuery(
                     "select * from average_flight_cost ");
             int rowCount = 0;
@@ -140,7 +143,7 @@ public class QueryArrivalAverageCost {
                 j++;
             }
 
-            label.setText("Average flight cost based on arrival location");
+            label.setText("Average flight cost based on departure location");
             panel.add(label);
 
             refreshTable();

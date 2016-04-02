@@ -1,3 +1,6 @@
+package main.java.Menu.Admin;
+
+import main.java.Menu.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,16 +10,16 @@ import java.sql.ResultSet;
 /**
  * Created by yoonyok on 2016-03-24.
  */
-public class DeletePassenger {
+public class DeleteBaggage {
     private JPanel panel;
     private JLabel label = new JLabel();
     private JLabel label2 = new JLabel();
     private JLabel prompt;
-    private String passenger_id_to_query;
+    private String baggage_id_to_query;
     private JTable table;
     private Object[][] data;
     private JScrollPane scrollPane;
-    private String[] columns = new String[]{"First Name", "Last Name", "Passport No"};
+    private String[] columns = new String[]{"Passenger ID", "Baggage ID","Weight", "Type"};
     private JButton backButton;
 
 
@@ -27,12 +30,12 @@ public class DeletePassenger {
 
 
         prompt = new JLabel();
-        prompt.setText("Please enter Passport Number to delete");
+        prompt.setText("Please enter Baggage ID to delete");
         panel.add(prompt);
 
-        final JTextField passenger_id = new JTextField();
-        passenger_id.setPreferredSize(new Dimension(250,20));
-        panel.add(passenger_id);
+        final JTextField baggage_id = new JTextField();
+        baggage_id.setPreferredSize(new Dimension(250,20));
+        panel.add(baggage_id);
 
 
         JButton search = new JButton();
@@ -40,11 +43,11 @@ public class DeletePassenger {
         search.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                passenger_id_to_query = passenger_id.getText();
+                baggage_id_to_query = baggage_id.getText();
                 try {
-                    deletePassenger();
+                    deleteBaggage();
                 }catch(Exception e1){
-                    label.setText("Passenger not found");
+                    label.setText("Baggage Not Found");
                     panel.add(label);
                     e1.printStackTrace();
 
@@ -52,6 +55,9 @@ public class DeletePassenger {
             }
         });
         panel.add(search);
+
+
+
 
         backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
@@ -63,14 +69,14 @@ public class DeletePassenger {
         });
         panel.add(backButton);
 
-        viewAllPassenger();
+        viewAllBaggages();
 
     }
 
-    private void viewAllPassenger() {
+    private void viewAllBaggages() {
         try{
-            ResultSet mySet = Main.myStat.executeQuery("select first_name, last_name, passport_no  " +
-                    "from passengers");
+            ResultSet mySet = Main.myStat.executeQuery("select passenger_id, baggage_id, weight, type " +
+                    "from baggages  , passengers where passengers.passport_no = baggages.passport_no");
 
             int rowCount = 0;
 
@@ -92,20 +98,19 @@ public class DeletePassenger {
             }
             refreshTable();
         }catch(Exception e){
-            label.setText("Passenger Not Found");
+            label.setText("Baggage Not Found");
             panel.add(label);
             e.printStackTrace();
         }
     }
 
-    public void deletePassenger() throws Exception{
+    public void deleteBaggage() throws Exception{
 
             Main.myStat.executeUpdate(
-                    "Delete from passengers where passport_no = \"" + passenger_id_to_query + "\"");
-
-            ResultSet mySet = Main.myStat.executeQuery("select first_name, last_name, passport_no  " +
-                    "from passengers");
-
+                    "Delete from baggages where baggage_id = " + baggage_id_to_query
+            );
+            ResultSet mySet = Main.myStat.executeQuery("select passenger_id, baggage_id, weight, type " +
+                    "from baggages, passengers where passengers.passport_no = baggages.passport_no");
             int rowCount = 0;
 
             if(mySet.last()){
