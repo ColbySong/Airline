@@ -183,6 +183,7 @@ public class PassengerInfo {
         if (!passportNoField.getText().matches("([A-Z])\\d{6}") || passportNoField.getText().equals("")
                 || passwordField.getText().equals("") || firstNameField.getText().equals("")
                 || lastNameField.getText().equals("")) {
+            updateLabel.setForeground(Color.RED);
             if (!passportNoField.getText().matches("([A-Z])\\d{6}")) {
                 passportNoErrorLabel.setText("Please enter a valid passport number (ie. A123456)");
             }
@@ -203,13 +204,12 @@ public class PassengerInfo {
                 lastNameErrorLabel.setText("Please enter your last name.");
             }
 
-            updateLabel.setForeground(Color.RED);
             updateLabel.setText("Unable to update your information.");
 
             return false;
         }
 
-        updateLabel.setForeground(Color.BLACK);
+        updateLabel.setForeground(Color.GREEN);
         updateLabel.setText("Update successful!");
 
         return true;

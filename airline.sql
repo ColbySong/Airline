@@ -185,50 +185,43 @@ insert into reserves
 values('M142335', '100ABC', 45, 1);
 
 insert into reserves
-values('M142335', '200DEF', 45, 6);
+values('M142335', '200DEF', 45, 2);
 
 insert into reserves
-values('M142335', '300GHI', 45, 7);
+values('M142335', '300GHI', 45, 3);
 
 insert into reserves
-values('M142335', '400JKL', 45, 8);
+values('M142335', '400JKL', 45, 4);
 
 insert into reserves
-values('M142335', '500MNO', 45, 9);
-
-
-insert into reserves
-values('M100502', '200DEF', 90, 2);
+values('M142335', '500MNO', 45, 5);
 
 insert into reserves
-values('M100502', '100ABC', 90, 2);
+values('M100502', '200DEF', 90, 6);
 
 insert into reserves
-values('M100502', '300GHI', 90, 2);
+values('M100502', '100ABC', 90, 7);
 
 insert into reserves
-values('M100502', '400JKL', 90, 2);
+values('M100502', '300GHI', 90, 8);
 
 insert into reserves
-values('M100502', '500MNO', 90, 2);
-
-
-insert into reserves
-values('N300531', '300GHI', 3, 3);
+values('M100502', '400JKL', 90, 9);
 
 insert into reserves
-values('N300531', '100ABC', 3, 3);
-
-
-insert into reserves
-values('N239942', '200DEF', 78, 4);
+values('M100502', '500MNO', 90, 10);
 
 insert into reserves
-values('N239942', '100ABC', 78, 4);
+values('N300531', '300GHI', 3, 11);
 
 insert into reserves
-values('P023945', '100ABC', 60, 5);
+values('N300531', '100ABC', 3, 12);
 
+insert into reserves
+values('N239942', '200DEF', 78, 13);
 
+insert into reserves
+values('N239942', '100ABC', 78, 14);
 
-
+insert into reserves
+values('P023945', '100ABC', 60, 15);
