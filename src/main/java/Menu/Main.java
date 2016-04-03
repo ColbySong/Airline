@@ -1,12 +1,18 @@
 package main.java.Menu;
 
-import main.java.Menu.Admin.*;
-import main.java.Menu.User.Passenger.*;
+import main.java.Menu.Admin.AdminPanel;
+import main.java.Menu.User.Passenger.CreatePassenger;
+import main.java.Menu.User.Passenger.Passenger;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * Created by Daniel on 2016-03-20.

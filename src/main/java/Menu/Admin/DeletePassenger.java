@@ -1,6 +1,7 @@
 package main.java.Menu.Admin;
 
-import main.java.Menu.*;
+import main.java.Menu.Main;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

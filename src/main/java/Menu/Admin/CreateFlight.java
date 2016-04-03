@@ -1,13 +1,13 @@
 
 package main.java.Menu.Admin;
 
-import main.java.Menu.*;
+import main.java.Menu.Main;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 
 /**
  * Created by Daniel on 2016-03-24.

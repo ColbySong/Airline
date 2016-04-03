@@ -1,7 +1,8 @@
 package main.java.Menu.Admin;
 
-import main.java.Menu.*;
 import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
+import main.java.Menu.Main;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

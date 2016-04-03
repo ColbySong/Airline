@@ -1,12 +1,14 @@
 package main.java.Menu.User.Flight;
 
-import main.java.Menu.*;
-import main.java.Menu.User.Passenger.*;
+import main.java.Menu.Main;
+import main.java.Menu.User.Passenger.Passenger;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
