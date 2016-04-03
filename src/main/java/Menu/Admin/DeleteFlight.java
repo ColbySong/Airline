@@ -14,6 +14,7 @@ import java.sql.SQLException;
 public class DeleteFlight {
     private JPanel panel;
     private JLabel errorMsg = new JLabel();
+    private JLabel flightNotFoundMsg;
     private String flight_id_to_query;
     private Object[][] data;
     private JScrollPane scrollPane;
@@ -54,6 +55,7 @@ public class DeleteFlight {
                 try {
                     deleteFlight();
                 } catch (Exception e1) {
+                    flightNotFoundMsg.setText("");
                     c.fill = GridBagConstraints.HORIZONTAL;
                     c.gridx = 1;
                     c.gridy = 2;
@@ -61,12 +63,14 @@ public class DeleteFlight {
                     errorMsg.setText("Flight Cannot Be Deleted - Has Reservations");
                     errorMsg.setForeground(Color.RED);
                     errorMsg.setVisible(true);
-                    e1.printStackTrace();
-
                 }
             }
         });
         panel.add(search, c);
+
+        flightNotFoundMsg = new JLabel("");
+        flightNotFoundMsg.setForeground(Color.RED);
+        panel.add(flightNotFoundMsg);
 
         JButton backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
@@ -101,8 +105,6 @@ public class DeleteFlight {
                     data[j][i] = mySet.getObject(i + 1);
                 }
                 j++;
-
-
             }
             refreshTable();
         } catch (Exception e) {
@@ -116,9 +118,18 @@ public class DeleteFlight {
     }
 
     public void deleteFlight() throws SQLException {
+        ResultSet rs = Main.myStat.executeQuery("Select * from flights where flight_no = '" + flight_id_to_query + "'");
+
+        if (!rs.isBeforeFirst()) {
+            flightNotFoundMsg.setText("Flight not found");
+            return;
+        }
+
         Main.myStat.executeUpdate(
                 "Delete from flights where flight_no = '" + flight_id_to_query + "'"
         );
+
+        flightNotFoundMsg.setText("");
 
         ResultSet mySet = Main.myStat.executeQuery("select flight_no from flights");
 
@@ -137,10 +148,8 @@ public class DeleteFlight {
                 data[j][i] = mySet.getObject(i + 1);
             }
             j++;
-
         }
         refreshTable();
-
     }
 
     private void refreshTable() {

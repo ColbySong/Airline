@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 public class DeleteBaggage {
     private JPanel panel;
     private JLabel label = new JLabel();
+    private JLabel baggageNotFoundMsg;
     private String baggage_id_to_query;
     private Object[][] data;
     private JScrollPane scrollPane;
@@ -63,6 +64,9 @@ public class DeleteBaggage {
         });
         panel.add(search, c);
 
+        baggageNotFoundMsg = new JLabel("");
+        baggageNotFoundMsg.setForeground(Color.RED);
+        panel.add(baggageNotFoundMsg);
 
         JButton backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
@@ -98,8 +102,6 @@ public class DeleteBaggage {
                     data[j][i] = mySet.getObject(i+1);
                 }
                 j++;
-
-
             }
             refreshTable();
         }catch (Exception e){
@@ -113,31 +115,41 @@ public class DeleteBaggage {
     }
 
     public void deleteBaggage() throws Exception{
+        ResultSet rs = Main.myStat.executeQuery("Select * from baggages where baggage_id = '" + baggage_id_to_query + "'");
 
-            Main.myStat.executeUpdate(
-                    "Delete from baggages where baggage_id = " + baggage_id_to_query
-            );
-            ResultSet mySet = Main.myStat.executeQuery("select first_name, last_name, passenger_id, baggage_id, weight, type " +
-                    "from baggages, passengers where passengers.passport_no = baggages.passport_no");
-            int rowCount = 0;
+        if (!rs.isBeforeFirst()) {
+            baggageNotFoundMsg.setText("Baggage not found");
+            return;
+        }
 
-            if(mySet.last()){
-                rowCount = mySet.getRow();
-                mySet.beforeFirst();
+        Main.myStat.executeUpdate(
+                "Delete from baggages where baggage_id = " + baggage_id_to_query
+        );
+
+        baggageNotFoundMsg.setText("");
+
+        ResultSet mySet = Main.myStat.executeQuery("select first_name, last_name, passenger_id, baggage_id, weight, type " +
+                "from baggages, passengers where passengers.passport_no = baggages.passport_no");
+
+        int rowCount = 0;
+
+        if(mySet.last()){
+            rowCount = mySet.getRow();
+            mySet.beforeFirst();
+        }
+
+        data = new Object[rowCount][columns.length];
+        int j = 0;
+
+        while(mySet.next()){
+            for(int i=0; i<columns.length; i++) {
+                data[j][i] = mySet.getObject(i+1);
             }
+            j++;
 
-            data = new Object[rowCount][columns.length];
-            int j = 0;
+        }
 
-            while(mySet.next()){
-                for(int i=0; i<columns.length; i++) {
-                    data[j][i] = mySet.getObject(i+1);
-                }
-                j++;
-
-            }
-
-            refreshTable();
+        refreshTable();
 
 
     }

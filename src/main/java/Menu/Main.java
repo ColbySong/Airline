@@ -160,6 +160,9 @@ public class Main {
 
     private static boolean isValidLogin(String passportNo, char[] password) {
         String passwordString = new String(password);
+
+        invalidPassportOrPassword.setText(" ");
+
         try {
             ResultSet results = Main.myStat.executeQuery("select passport_no, password from passengers where passport_no = " +
                     "\'" + passportNo + "\'" + " and password = " + "\'" + passwordString + "\'");

@@ -14,7 +14,8 @@ import java.sql.ResultSet;
 public class DeletePassenger {
     private JPanel panel;
     private JLabel errorMsg = new JLabel();
-    private String passenger_id_to_query;
+    private JLabel passengerNotFoundMsg;
+    private String passport_no_to_query;
     private Object[][] data;
     private JScrollPane scrollPane;
     private String[] columns = new String[]{"First Name", "Last Name", "Passport No"};
@@ -50,7 +51,7 @@ public class DeletePassenger {
         search.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                passenger_id_to_query = passenger_id.getText();
+                passport_no_to_query = passenger_id.getText();
                 try {
                     deletePassenger();
                 } catch (Exception e1) {
@@ -65,6 +66,10 @@ public class DeletePassenger {
             }
         });
         panel.add(search, c);
+
+        passengerNotFoundMsg = new JLabel("");
+        passengerNotFoundMsg.setForeground(Color.RED);
+        panel.add(passengerNotFoundMsg);
 
         JButton backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
@@ -113,9 +118,17 @@ public class DeletePassenger {
     }
 
     public void deletePassenger() throws Exception {
+        ResultSet rs = Main.myStat.executeQuery("Select * from passengers where passport_no = '" + passport_no_to_query + "'");
+
+        if (!rs.isBeforeFirst()) {
+            passengerNotFoundMsg.setText("Passenger not found");
+            return;
+        }
 
         Main.myStat.executeUpdate(
-                "Delete from passengers where passport_no = \"" + passenger_id_to_query + "\"");
+                "Delete from passengers where passport_no = \"" + passport_no_to_query + "\"");
+
+        passengerNotFoundMsg.setText("");
 
         ResultSet mySet = Main.myStat.executeQuery("select first_name, last_name, passport_no  " +
                 "from passengers");
@@ -135,12 +148,9 @@ public class DeletePassenger {
                 data[j][i] = mySet.getObject(i + 1);
             }
             j++;
-
         }
 
         refreshTable();
-
-
     }
 
     private void refreshTable() {
