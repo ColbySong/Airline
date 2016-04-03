@@ -13,7 +13,7 @@ import java.sql.SQLException;
  */
 public class DeleteFlight {
     private JPanel panel;
-    private JLabel label = new JLabel();
+    private JLabel errorMsg = new JLabel();
     private String flight_id_to_query;
     private Object[][] data;
     private JScrollPane scrollPane;
@@ -50,14 +50,17 @@ public class DeleteFlight {
             @Override
             public void actionPerformed(ActionEvent e) {
                 flight_id_to_query = flight_id.getText();
+                errorMsg.setVisible(false);
                 try {
                     deleteFlight();
                 } catch (Exception e1) {
                     c.fill = GridBagConstraints.HORIZONTAL;
                     c.gridx = 1;
                     c.gridy = 2;
-                    panel.add(label, c);
-                    label.setText("Flight Cannot Be Deleted - Has Reservations");
+                    panel.add(errorMsg, c);
+                    errorMsg.setText("Flight Cannot Be Deleted - Has Reservations");
+                    errorMsg.setForeground(Color.RED);
+                    errorMsg.setVisible(true);
                     e1.printStackTrace();
 
                 }
@@ -106,14 +109,13 @@ public class DeleteFlight {
             c.fill = GridBagConstraints.HORIZONTAL;
             c.gridx = 1;
             c.gridy = 2;
-            label.setText("Flight Not Found");
-            panel.add(label, c);
+            errorMsg.setText("Flight Not Found");
+            panel.add(errorMsg, c);
             e.printStackTrace();
         }
     }
 
     public void deleteFlight() throws SQLException {
-        System.out.println(flight_id_to_query);
         Main.myStat.executeUpdate(
                 "Delete from flights where flight_no = '" + flight_id_to_query + "'"
         );

@@ -13,7 +13,7 @@ import java.sql.ResultSet;
  */
 public class DeletePassenger {
     private JPanel panel;
-    private JLabel label = new JLabel();
+    private JLabel errorMsg = new JLabel();
     private String passenger_id_to_query;
     private Object[][] data;
     private JScrollPane scrollPane;
@@ -57,8 +57,8 @@ public class DeletePassenger {
                     c.fill = GridBagConstraints.HORIZONTAL;
                     c.gridx = 0;
                     c.gridy = 2;
-                    label.setText("Passenger not found");
-                    panel.add(label, c);
+                    errorMsg.setText("Passenger not found");
+                    panel.add(errorMsg, c);
                     e1.printStackTrace();
 
                 }
@@ -106,8 +106,8 @@ public class DeletePassenger {
             c.fill = GridBagConstraints.HORIZONTAL;
             c.gridx = 0;
             c.gridy = 2;
-            label.setText("Passenger Not Found");
-            panel.add(label, c);
+            errorMsg.setText("Passenger Not Found");
+            panel.add(errorMsg, c);
             e.printStackTrace();
         }
     }
