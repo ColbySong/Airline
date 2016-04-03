@@ -1,5 +1,4 @@
 package main.java.Menu.Admin;
-
 import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
 import main.java.Menu.Main;
 
@@ -24,24 +23,32 @@ public class QueryBaggageInfo {
     private JButton backButton;
     private String firstName;
     private String lastName;
+    private GridBagConstraints c;
 
-    public void init(){
+    public void init() {
         panel = new JPanel();
-        panel.setLayout(new FlowLayout());
+        panel.setLayout(new GridBagLayout());
+        c = new GridBagConstraints();
         Main.frame.add(panel);
 
-
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 1;
         prompt = new JLabel();
         prompt.setText("Please enter Passport Number");
-        panel.add(prompt);
+        panel.add(prompt, c);
 
-        final JTextField passenger_id = new JTextField();
-        passenger_id.setPreferredSize(new Dimension(250,20));
-        panel.add(passenger_id);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 1;
+        final JTextField passenger_id = new JTextField(15);
+        panel.add(passenger_id, c);
 
-
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 2;
+        c.gridy = 1;
         JButton search = new JButton();
-        search.setText("Search for Baggage Info");
+        search.setText("Display Baggages");
         search.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -50,10 +57,7 @@ public class QueryBaggageInfo {
                 System.out.println(passport_no_to_query);
             }
         });
-        panel.add(search);
-
-
-
+        panel.add(search, c);
 
         backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
@@ -67,8 +71,8 @@ public class QueryBaggageInfo {
 
     }
 
-    public void searchBaggages(){
-        try{
+    public void searchBaggages() {
+        try {
             ResultSet mySet = Main.myStat.executeQuery(
 
                     "select * from baggages, passengers where passengers.passport_no = baggages.passport_no AND " +
@@ -76,7 +80,7 @@ public class QueryBaggageInfo {
 
             int rowCount = 0;
 
-            if (mySet.last()){
+            if (mySet.last()) {
                 rowCount = mySet.getRow();
                 mySet.beforeFirst();
             }
@@ -84,8 +88,8 @@ public class QueryBaggageInfo {
             data = new Object[rowCount][columns.length];
             int j = 0;
 
-            while(mySet.next()){
-                for(int i=0; i<columns.length; i++) {
+            while (mySet.next()) {
+                for (int i = 0; i < columns.length; i++) {
                     data[j][i] = mySet.getObject(i + 1);
                 }
                 j++;
@@ -94,16 +98,19 @@ public class QueryBaggageInfo {
 
             }
 
-            label.setText("Baggages Info of Passenger " + firstName + " " + lastName);
-            panel.add(label);
-
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.gridx = 0;
+            c.gridy = 2;
+            label.setText("Baggages of " + firstName + " " + lastName);
+            panel.add(label, c);
 
             refreshTable();
-        }catch(MySQLSyntaxErrorException e){
+
+        } catch (MySQLSyntaxErrorException e) {
             JLabel error = new JLabel();
             error.setText("Please enter a valid Passenger ID");
             panel.add(error);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -112,9 +119,13 @@ public class QueryBaggageInfo {
         if (scrollPane != null) {
             panel.remove(scrollPane);
         }
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 3;
+        c.gridwidth = 2;
         table = new JTable(data, columns);
         scrollPane = new JScrollPane(table);
-        panel.add(scrollPane);
+        panel.add(scrollPane, c);
         panel.revalidate();
         panel.repaint();
     }

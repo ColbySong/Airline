@@ -23,24 +23,33 @@ public class QueryReservation {
     private JButton backButton;
     private String firstName;
     private String lastName;
+    private GridBagConstraints c;
+    private JTextField passport_no;
 
     public void init() {
         panel = new JPanel();
-        panel.setLayout(new FlowLayout());
+        panel.setLayout(new GridBagLayout());
+        c = new GridBagConstraints();
         Main.frame.add(panel);
 
-
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 1;
         prompt = new JLabel();
         prompt.setText("Please enter Passport Number");
-        panel.add(prompt);
+        panel.add(prompt, c);
 
-        final JTextField passport_no = new JTextField();
-        passport_no.setPreferredSize(new Dimension(250, 20));
-        panel.add(passport_no);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 1;
+        passport_no = new JTextField(15);
+        panel.add(passport_no, c);
 
-
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 2;
+        c.gridy = 1;
         JButton search = new JButton();
-        search.setText("Search for Researved Flight Info");
+        search.setText("Display Reserved Flights");
         search.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -48,8 +57,7 @@ public class QueryReservation {
                 searchReservedFlights();
             }
         });
-        panel.add(search);
-
+        panel.add(search, c);
 
         backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
@@ -91,8 +99,11 @@ public class QueryReservation {
 
             }
 
-            label.setText("Reserved Flight Info of Passenger " + firstName + " " + lastName);
-            panel.add(label);
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.gridx = 0;
+            c.gridy = 2;
+            label.setText("Reserved Flight for " + firstName + " " + lastName);
+            panel.add(label, c);
 
 
             refreshTable();
@@ -105,9 +116,13 @@ public class QueryReservation {
         if (scrollPane != null) {
             panel.remove(scrollPane);
         }
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 3;
+        c.gridwidth = 2;
         table = new JTable(data, columns);
         scrollPane = new JScrollPane(table);
-        panel.add(scrollPane);
+        panel.add(scrollPane, c);
         panel.revalidate();
         panel.repaint();
     }

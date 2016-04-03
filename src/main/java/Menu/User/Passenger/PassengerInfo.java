@@ -26,9 +26,11 @@ public class PassengerInfo {
     private JLabel lastNameErrorLabel;
     private JLabel updateLabel;
 
+    private GridBagConstraints c;
+
     public void init() {
         panel = new JPanel();
-        GridBagConstraints c = new GridBagConstraints();
+        c = new GridBagConstraints();
         panel.setLayout(new GridBagLayout());
         Main.frame.add(panel);
 
@@ -41,8 +43,7 @@ public class PassengerInfo {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 1;
-        passportNoField = new JTextField(Passenger.passportNo, 20);
-        passportNoField.setSize(100, 10);
+        passportNoField = new JTextField(Passenger.passportNo, 15);
         panel.add(passportNoField, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -61,8 +62,7 @@ public class PassengerInfo {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 3;
-        passwordField = new JTextField(Passenger.password, 30);
-        passwordField.setSize(100, 10);
+        passwordField = new JTextField(Passenger.password, 15);
         panel.add(passwordField, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -81,8 +81,7 @@ public class PassengerInfo {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 5;
-        firstNameField = new JTextField(Passenger.firstName, 20);
-        firstNameField.setSize(100, 10);
+        firstNameField = new JTextField(Passenger.firstName, 15);
         panel.add(firstNameField, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -101,8 +100,7 @@ public class PassengerInfo {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 7;
-        lastNameField = new JTextField(Passenger.lastName, 20);
-        lastNameField.setSize(100, 10);
+        lastNameField = new JTextField(Passenger.lastName, 15);
         panel.add(lastNameField, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;

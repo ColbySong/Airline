@@ -21,15 +21,18 @@ public class QueryArrivalAverageCost {
     private JButton backButton;
     private JButton maxButton;
     private JButton minButton;
-    private int count = 0;
+    private JButton avgButton;
+    private GridBagConstraints c;
 
     public void init(){
         panel = new JPanel();
-        panel.setLayout(new FlowLayout());
+        panel.setLayout(new GridBagLayout());
+        c = new GridBagConstraints();
         Main.frame.add(panel);
 
-        findAverageDepartingCost();
-
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 1;
         maxButton = new JButton("Most Expensive");
         maxButton.addActionListener(new ActionListener() {
             @Override
@@ -37,8 +40,11 @@ public class QueryArrivalAverageCost {
                 findMaxAverageDepartingCost();
             }
         });
-        panel.add(maxButton);
+        panel.add(maxButton, c);
 
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 1;
         minButton = new JButton("Least Expensive");
         minButton.addActionListener(new ActionListener() {
             @Override
@@ -47,7 +53,19 @@ public class QueryArrivalAverageCost {
 
             }
         });
-        panel.add(minButton);
+        panel.add(minButton, c);
+
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 2;
+        c.gridy = 1;
+        avgButton = new JButton("Average Cost");
+        avgButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                findAverageDepartingCost();
+            }
+        });
+        panel.add(avgButton, c);
 
 
         backButton = new JButton("Back");
@@ -60,6 +78,7 @@ public class QueryArrivalAverageCost {
         });
         panel.add(backButton);
 
+        findAverageDepartingCost();
     }
 
     private void findMinAverageArrivalCost() {
@@ -83,8 +102,11 @@ public class QueryArrivalAverageCost {
                 j++;
             }
 
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.gridx = 0;
+            c.gridy = 2;
             label.setText("Mininum Average Flight Cost");
-            panel.add(label);
+            panel.add(label, c);
 
             refreshTable();
         }catch(Exception e){
@@ -113,8 +135,11 @@ public class QueryArrivalAverageCost {
                 j++;
             }
 
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.gridx = 0;
+            c.gridy = 2;
             label.setText("Maximum Average Flight Cost");
-            panel.add(label);
+            panel.add(label, c);
 
             refreshTable();
         }catch(Exception e){
@@ -144,8 +169,11 @@ public class QueryArrivalAverageCost {
                 j++;
             }
 
-            label.setText("Average flight cost based on arrival location");
-            panel.add(label);
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.gridx = 0;
+            c.gridy = 2;
+            label.setText("Average Cost of All Flights");
+            panel.add(label, c);
 
             refreshTable();
         }catch(Exception e){
@@ -157,9 +185,13 @@ public class QueryArrivalAverageCost {
         if (scrollPane != null) {
             panel.remove(scrollPane);
         }
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 3;
+        c.gridwidth = 3;
         table = new JTable(data, columns);
         scrollPane = new JScrollPane(table);
-        panel.add(scrollPane);
+        panel.add(scrollPane, c);
         panel.revalidate();
         panel.repaint();
     }
