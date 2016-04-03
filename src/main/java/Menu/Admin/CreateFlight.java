@@ -18,7 +18,6 @@ public class CreateFlight {
 
     private JTextField flight_no;
     private JTextField available_seats;
-    private JTextField cost;
     private JTextField airplane_id;
     private JTextField airportid_depart;
     private JTextField airportid_arrive;
@@ -29,13 +28,12 @@ public class CreateFlight {
     private JLabel successMsg = new JLabel();
     private JLabel typeErrorMsg = new JLabel();
     private JLabel flight_noErrorLabel = new JLabel();
-    private GridBagConstraints c;
 
 
     public void init() {
         panel = new JPanel();
         panel.setLayout(new GridBagLayout());
-        c = new GridBagConstraints();
+        GridBagConstraints c = new GridBagConstraints();
         Main.frame.add(panel);
 
         successMsg.setVisible(false);
@@ -49,7 +47,7 @@ public class CreateFlight {
         flight_no = new JTextField("Flight No",20);
         flight_no.setForeground(Color.GRAY);
         flight_no.setSize(100, 10);
-        panel.add(flight_no,c);
+        panel.add(flight_no, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
@@ -58,13 +56,13 @@ public class CreateFlight {
         available_seats = new JTextField("Available Seats",20);
         available_seats.setForeground(Color.GRAY);
         available_seats.setSize(100, 10);
-        panel.add(available_seats,c);
+        panel.add(available_seats, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 2;
 
-        cost = new JTextField("Cost",20);
+        JTextField cost = new JTextField("Cost", 20);
         cost.setForeground(Color.GRAY);
         cost.setSize(100, 10);
         panel.add(cost, c);
@@ -131,7 +129,7 @@ public class CreateFlight {
         time_arrive = new JTextField("Arrival Time",20);
         time_arrive.setForeground(Color.GRAY);
         time_arrive.setSize(100, 10);
-        panel.add(time_arrive,c);
+        panel.add(time_arrive, c);
 
         successMsg.setText("Flight Created Successfully");
         typeErrorMsg.setText("Please Enter a Valid Field");
@@ -167,7 +165,7 @@ public class CreateFlight {
                 AdminPanel.panel.setVisible(true);
             }
         });
-        panel.add(backButton,c);
+        panel.add(backButton, c);
 
         c.gridx = 0;
         c.gridy = -1;

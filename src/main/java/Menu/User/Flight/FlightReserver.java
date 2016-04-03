@@ -19,13 +19,8 @@ import java.util.Random;
  */
 public class FlightReserver {
 
-    private GridBagConstraints c;
-
     private JPanel panel;
     private JLabel reservationAlert = new JLabel();
-
-    private static int MINIMUM_SEATNO = 1;
-    private static int MAXIMUM_CONFNO = Integer.MAX_VALUE;
 
     private int seatCapacity = 0;
 
@@ -33,13 +28,12 @@ public class FlightReserver {
     private int confirmationNo;
     private String reservedFlightNo;
     private String passportNo = Passenger.passportNo;
-    private String insertClause = "insert into reserves values";
 
     public void init(String reservedFlightNo) {
         this.reservedFlightNo = reservedFlightNo;
 
         panel = new JPanel();
-        c = new GridBagConstraints();
+        GridBagConstraints c = new GridBagConstraints();
         panel.setLayout(new GridBagLayout());
         Main.frame.add(panel);
 
@@ -146,6 +140,7 @@ public class FlightReserver {
 
             while (seatNumber == 0) {
                 Random rand = new Random();
+                int MINIMUM_SEATNO = 1;
                 int tempSeatNum = rand.nextInt((seatCapacity - MINIMUM_SEATNO) + 1) + MINIMUM_SEATNO;
 
                 if (!bookedSeats.contains(tempSeatNum)) {
@@ -172,6 +167,7 @@ public class FlightReserver {
 
             while (confirmationNo == 0) {
                 Random rand = new Random();
+                int MAXIMUM_CONFNO = Integer.MAX_VALUE;
                 int tempConfNum = rand.nextInt(MAXIMUM_CONFNO);
 
                 if (!confirmedNums.contains(tempConfNum)) {
@@ -184,6 +180,7 @@ public class FlightReserver {
     }
 
     private String generateInsertClause() {
+        String insertClause = "insert into reserves values";
         return insertClause + "(" + "\'" + passportNo + "\'" + ", " + "\'" + reservedFlightNo + "\'" + ", "
                 + seatNumber + ", " + confirmationNo + ")";
     }

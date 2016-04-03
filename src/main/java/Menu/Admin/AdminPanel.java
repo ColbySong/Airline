@@ -18,7 +18,6 @@ public class AdminPanel {
     private JLabel passengerFlightDetail = new JLabel("Passenger Flight Details");
 
     private JTable PFTable;
-    private JTable AFTable;
 
     private Object[][] data;
     private JScrollPane scrollPanePF;
@@ -26,7 +25,6 @@ public class AdminPanel {
     private String[] passengerFlight = new String[] {"Passport Number", "Passenger ID", "First Name", "Last Name",
     "Flight Number", "Confirmation Number"};
     private String[] airplaneFlight = new String[] {"Airplane ID", "Manufacturer", "Model", "Capacity", "Flight Number"};
-    private JButton backButton;
     private GridBagConstraints c;
 
     public void init(){
@@ -93,7 +91,7 @@ public class AdminPanel {
          */
         c.gridx = 4;
         c.gridy = 0;
-        backButton = new JButton("Logout");
+        JButton backButton = new JButton("Logout");
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -269,7 +267,7 @@ public class AdminPanel {
         c.gridwidth = 5;
         c.gridheight = 5;
         c.gridy = PFTable.getRowHeight() + 2;
-        AFTable = new JTable(data, airplaneFlight);
+        JTable AFTable = new JTable(data, airplaneFlight);
         scrollPaneAF = new JScrollPane(AFTable);
         AFTable.setPreferredScrollableViewportSize(AFTable.getPreferredSize());
         panel.add(scrollPaneAF, c);

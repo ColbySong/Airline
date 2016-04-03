@@ -15,12 +15,9 @@ public class QueryReservesDivision {
 
     private JPanel panel;
     private JScrollPane scrollPane;
-    private JTable table;
     private Object[][] data;
     private String[] columns = new String[]{"passport", "number of flights"};
-    private JLabel label;
     private GridBagConstraints c;
-    private JButton backButton;
 
     public void init() {
         panel = new JPanel();
@@ -30,7 +27,7 @@ public class QueryReservesDivision {
 
         displayPassengersWhoBookedAll();
 
-        backButton = new JButton("Back");
+        JButton backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -68,7 +65,7 @@ public class QueryReservesDivision {
             c.fill = GridBagConstraints.HORIZONTAL;
             c.gridx = 0;
             c.gridy = 0;
-            label = new JLabel();
+            JLabel label = new JLabel();
             label.setText("Passenger who booked all flights");
             panel.add(label, c);
 
@@ -86,7 +83,7 @@ public class QueryReservesDivision {
         c.gridx = 0;
         c.gridy = 1;
         c.gridwidth = 2;
-        table = new JTable(data, columns);
+        JTable table = new JTable(data, columns);
         scrollPane = new JScrollPane(table);
         panel.add(scrollPane, c);
         panel.revalidate();

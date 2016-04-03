@@ -14,11 +14,9 @@ import java.sql.ResultSet;
 public class QueryFlightDivision {
     private JPanel panel;
     private JLabel label = new JLabel();
-    private JTable table;
     private Object[][] data;
     private JScrollPane scrollPane;
     private String[] columns = new String[]{"Flight Number", "Number of Passengers"};
-    private JButton backButton;
     private GridBagConstraints c;
 
     public void init(){
@@ -29,7 +27,7 @@ public class QueryFlightDivision {
 
         findFlightWithAllPassengers();
 
-        backButton = new JButton("Back");
+        JButton backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -85,7 +83,7 @@ public class QueryFlightDivision {
         c.gridx = 0;
         c.gridy = 1;
         c.gridwidth = 2;
-        table = new JTable(data, columns);
+        JTable table = new JTable(data, columns);
         scrollPane = new JScrollPane(table);
         panel.add(scrollPane, c);
         panel.revalidate();

@@ -26,11 +26,9 @@ public class PassengerInfo {
     private JLabel lastNameErrorLabel;
     private JLabel updateLabel;
 
-    private GridBagConstraints c;
-
     public void init() {
         panel = new JPanel();
-        c = new GridBagConstraints();
+        GridBagConstraints c = new GridBagConstraints();
         panel.setLayout(new GridBagLayout());
         Main.frame.add(panel);
 

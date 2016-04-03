@@ -14,13 +14,10 @@ import java.sql.SQLException;
 public class DeleteFlight {
     private JPanel panel;
     private JLabel label = new JLabel();
-    private JLabel prompt;
     private String flight_id_to_query;
-    private JTable table;
     private Object[][] data;
     private JScrollPane scrollPane;
     private String[] columns = new String[]{"Flight No"};
-    private JButton backButton;
     private GridBagConstraints c;
 
 
@@ -33,7 +30,7 @@ public class DeleteFlight {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 1;
-        prompt = new JLabel();
+        JLabel prompt = new JLabel();
         prompt.setText("Please enter Flight ID to delete");
         panel.add(prompt, c);
 
@@ -68,7 +65,7 @@ public class DeleteFlight {
         });
         panel.add(search, c);
 
-        backButton = new JButton("Back");
+        JButton backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -152,7 +149,7 @@ public class DeleteFlight {
         c.gridx = 0;
         c.gridy = 3;
         c.gridwidth = 3;
-        table = new JTable(data, columns);
+        JTable table = new JTable(data, columns);
         scrollPane = new JScrollPane(table);
         panel.add(scrollPane, c);
         panel.revalidate();

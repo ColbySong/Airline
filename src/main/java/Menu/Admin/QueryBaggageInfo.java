@@ -14,13 +14,10 @@ import java.sql.ResultSet;
 public class QueryBaggageInfo {
     private JPanel panel;
     private JLabel label = new JLabel();
-    private JLabel prompt;
     private String passport_no_to_query;
-    private JTable table;
     private Object[][] data;
     private JScrollPane scrollPane;
     private String[] columns = new String[]{"Baggage ID", "Weight", "Type"};
-    private JButton backButton;
     private String firstName;
     private String lastName;
     private GridBagConstraints c;
@@ -34,7 +31,7 @@ public class QueryBaggageInfo {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 1;
-        prompt = new JLabel();
+        JLabel prompt = new JLabel();
         prompt.setText("Please enter Passport Number");
         panel.add(prompt, c);
 
@@ -59,7 +56,7 @@ public class QueryBaggageInfo {
         });
         panel.add(search, c);
 
-        backButton = new JButton("Back");
+        JButton backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -123,7 +120,7 @@ public class QueryBaggageInfo {
         c.gridx = 0;
         c.gridy = 3;
         c.gridwidth = 2;
-        table = new JTable(data, columns);
+        JTable table = new JTable(data, columns);
         scrollPane = new JScrollPane(table);
         panel.add(scrollPane, c);
         panel.revalidate();

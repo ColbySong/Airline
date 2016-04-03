@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
 
 /**
  * Created by Colby on 2016-03-23.
@@ -16,17 +15,14 @@ import java.sql.ResultSet;
 public class QueryPassengerDivision {
     static JPanel panel;
     private JLabel label = new JLabel();
-    private JTable table;
     private Object[][] data;
     private JScrollPane scrollPane;
     private String[] columns = new String[]{"passport", "number of flights"};
-    private JButton backButton;
-    private GridBagConstraints c;
 
     public void init(){
         panel = new JPanel();
         panel.setLayout(new GridBagLayout());
-        c = new GridBagConstraints();
+        GridBagConstraints c = new GridBagConstraints();
         Main.frame.add(panel);
 
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -86,7 +82,7 @@ public class QueryPassengerDivision {
             }
         });
 
-        backButton = new JButton("Back");
+        JButton backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -135,7 +131,7 @@ public class QueryPassengerDivision {
         if (scrollPane != null) {
             panel.remove(scrollPane);
         }
-        table = new JTable(data, columns);
+        JTable table = new JTable(data, columns);
         scrollPane = new JScrollPane(table);
         panel.add(scrollPane);
         panel.revalidate();

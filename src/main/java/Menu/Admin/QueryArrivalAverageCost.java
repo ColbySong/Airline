@@ -14,14 +14,9 @@ import java.sql.ResultSet;
 public class QueryArrivalAverageCost {
     private JPanel panel;
     private JLabel label = new JLabel();
-    private JTable table;
     private Object[][] data;
     private JScrollPane scrollPane;
     private String[] columns = new String[]{"Arrival AirportID", "Average Cost"};
-    private JButton backButton;
-    private JButton maxButton;
-    private JButton minButton;
-    private JButton avgButton;
     private GridBagConstraints c;
 
     public void init(){
@@ -33,7 +28,7 @@ public class QueryArrivalAverageCost {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 1;
-        maxButton = new JButton("Most Expensive");
+        JButton maxButton = new JButton("Most Expensive");
         maxButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -45,7 +40,7 @@ public class QueryArrivalAverageCost {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 1;
-        minButton = new JButton("Least Expensive");
+        JButton minButton = new JButton("Least Expensive");
         minButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -58,7 +53,7 @@ public class QueryArrivalAverageCost {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 2;
         c.gridy = 1;
-        avgButton = new JButton("Average Cost");
+        JButton avgButton = new JButton("Average Cost");
         avgButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -68,7 +63,7 @@ public class QueryArrivalAverageCost {
         panel.add(avgButton, c);
 
 
-        backButton = new JButton("Back");
+        JButton backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -189,7 +184,7 @@ public class QueryArrivalAverageCost {
         c.gridx = 0;
         c.gridy = 3;
         c.gridwidth = 3;
-        table = new JTable(data, columns);
+        JTable table = new JTable(data, columns);
         scrollPane = new JScrollPane(table);
         panel.add(scrollPane, c);
         panel.revalidate();
