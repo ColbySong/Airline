@@ -88,7 +88,7 @@ public class FlightReserver {
 
             if (result.isBeforeFirst() && result.next()
                     && result.getString("passport_no").equals(passportNo) && result.getString("flight_no").equals(reservedFlightNo)) {
-                reservationAlert.setText("You have already booked this flight. Check your flights below!");
+                reservationAlert.setText("You have already booked this flight");
                 return false;
             } else {
                 reservationAlert.setText("Thank you for reserving a flight!");
