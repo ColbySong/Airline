@@ -14,31 +14,34 @@ import java.sql.ResultSet;
 public class DeleteBaggage {
     private JPanel panel;
     private JLabel label = new JLabel();
-    private JLabel label2 = new JLabel();
-    private JLabel prompt;
     private String baggage_id_to_query;
-    private JTable table;
     private Object[][] data;
     private JScrollPane scrollPane;
     private String[] columns = new String[]{"First Name", "Last Name", "Passenger ID", "Baggage ID","Weight", "Type"};
-    private JButton backButton;
-
+    private GridBagConstraints c;
 
     public void init(){
         panel = new JPanel();
-        panel.setLayout(new FlowLayout());
+        panel.setLayout(new GridBagLayout());
+        c = new GridBagConstraints();
         Main.frame.add(panel);
 
-
-        prompt = new JLabel();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 1;
+        JLabel prompt = new JLabel();
         prompt.setText("Please enter Baggage ID to delete");
-        panel.add(prompt);
+        panel.add(prompt, c);
 
-        final JTextField baggage_id = new JTextField();
-        baggage_id.setPreferredSize(new Dimension(250,20));
-        panel.add(baggage_id);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 1;
+        final JTextField baggage_id = new JTextField(15);
+        panel.add(baggage_id, c);
 
-
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 2;
+        c.gridy = 1;
         JButton search = new JButton();
         search.setText("Delete");
         search.addActionListener(new ActionListener() {
@@ -48,19 +51,20 @@ public class DeleteBaggage {
                 try {
                     deleteBaggage();
                 }catch(Exception e1){
+                    c.fill = GridBagConstraints.HORIZONTAL;
+                    c.gridx = 1;
+                    c.gridy = 2;
                     label.setText("Baggage Not Found");
-                    panel.add(label);
+                    panel.add(label, c);
                     e1.printStackTrace();
 
                 }
             }
         });
-        panel.add(search);
+        panel.add(search, c);
 
 
-
-
-        backButton = new JButton("Back");
+        JButton backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -98,9 +102,12 @@ public class DeleteBaggage {
 
             }
             refreshTable();
-        }catch(Exception e){
+        }catch (Exception e){
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.gridx = 1;
+            c.gridy = 2;
             label.setText("Baggage Not Found");
-            panel.add(label);
+            panel.add(label, c);
             e.printStackTrace();
         }
     }
@@ -139,9 +146,13 @@ public class DeleteBaggage {
         if (scrollPane != null) {
             panel.remove(scrollPane);
         }
-        table = new JTable(data, columns);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 3;
+        c.gridwidth = 3;
+        JTable table = new JTable(data, columns);
         scrollPane = new JScrollPane(table);
-        panel.add(scrollPane);
+        panel.add(scrollPane, c);
         panel.revalidate();
         panel.repaint();
     }

@@ -42,8 +42,7 @@ public class CreatePassenger {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 1;
-        passportNoField = new JTextField(20);
-        passportNoField.setSize(100, 10);
+        passportNoField = new JTextField(15);
         panel.add(passportNoField, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -62,8 +61,7 @@ public class CreatePassenger {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 3;
-        passwordField = new JTextField(30);
-        passwordField.setSize(100, 10);
+        passwordField = new JTextField(15);
         panel.add(passwordField, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -82,8 +80,7 @@ public class CreatePassenger {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 5;
-        firstNameField = new JTextField(20);
-        firstNameField.setSize(100, 10);
+        firstNameField = new JTextField(15);
         panel.add(firstNameField, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -102,8 +99,7 @@ public class CreatePassenger {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 7;
-        lastNameField = new JTextField(20);
-        lastNameField.setSize(100, 10);
+        lastNameField = new JTextField(15);
         panel.add(lastNameField, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -116,7 +112,7 @@ public class CreatePassenger {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 9;
-        JButton createPassengerButton = new JButton("Create Passenger Account");
+        JButton createPassengerButton = new JButton("Create Account");
         createPassengerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

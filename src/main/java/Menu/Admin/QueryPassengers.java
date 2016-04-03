@@ -15,8 +15,6 @@ public class QueryPassengers {
 
     private JPanel panel;
     private JComboBox passportNoComboBox;
-    private JButton getPassengerButton;
-    private JButton backButton;
     private JLabel label = new JLabel();
 
     public void init() {
@@ -37,7 +35,7 @@ public class QueryPassengers {
         }
         panel.add(passportNoComboBox);
 
-        getPassengerButton = new JButton("Get Passenger");
+        JButton getPassengerButton = new JButton("Get Passenger");
         getPassengerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -49,7 +47,7 @@ public class QueryPassengers {
         panel.add(label);
         panel.setLayout(new FlowLayout());
 
-        backButton = new JButton("Back");
+        JButton backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

@@ -14,32 +14,33 @@ import java.sql.ResultSet;
 public class QueryDepartureAverageCost {
     private JPanel panel;
     private JLabel label = new JLabel();
-    private JTable table;
     private Object[][] data;
     private JScrollPane scrollPane;
     private String[] columns = new String[]{"Departing AirportID", "Average Cost"};
-    private JButton backButton;
-    private JButton maxButton;
-    private JButton minButton;
-    private int count = 0;
+    private GridBagConstraints c;
 
     public void init(){
         panel = new JPanel();
-        panel.setLayout(new FlowLayout());
+        panel.setLayout(new GridBagLayout());
+        c = new GridBagConstraints();
         Main.frame.add(panel);
 
-        findAverageDepartingCost();
-
-        maxButton = new JButton("Most Expensive");
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 1;
+        JButton maxButton = new JButton("Most Expensive");
         maxButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 findMaxAverageDepartingCost();
             }
         });
-        panel.add(maxButton);
+        panel.add(maxButton, c);
 
-        minButton = new JButton("Least Expensive");
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 1;
+        JButton minButton = new JButton("Least Expensive");
         minButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -47,10 +48,22 @@ public class QueryDepartureAverageCost {
 
             }
         });
-        panel.add(minButton);
+        panel.add(minButton, c);
+
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 2;
+        c.gridy = 1;
+        JButton avgButton = new JButton("Average Cost");
+        avgButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                findAverageDepartingCost();
+            }
+        });
+        panel.add(avgButton, c);
 
 
-        backButton = new JButton("Back");
+        JButton backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -60,6 +73,7 @@ public class QueryDepartureAverageCost {
         });
         panel.add(backButton);
 
+        findAverageDepartingCost();
     }
 
     private void findMinAverageDepartingCost() {
@@ -83,8 +97,11 @@ public class QueryDepartureAverageCost {
                 j++;
             }
 
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.gridx = 0;
+            c.gridy = 2;
             label.setText("Mininum Average Flight Cost");
-            panel.add(label);
+            panel.add(label, c);
 
             refreshTable();
         }catch(Exception e){
@@ -113,8 +130,11 @@ public class QueryDepartureAverageCost {
                 j++;
             }
 
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.gridx = 0;
+            c.gridy = 2;
             label.setText("Maximum Average Flight Cost");
-            panel.add(label);
+            panel.add(label, c);
 
             refreshTable();
         }catch(Exception e){
@@ -144,8 +164,11 @@ public class QueryDepartureAverageCost {
                 j++;
             }
 
-            label.setText("Average flight cost based on departure location");
-            panel.add(label);
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.gridx = 0;
+            c.gridy = 2;
+            label.setText("Average Cost of All Flights");
+            panel.add(label, c);
 
             refreshTable();
         }catch(Exception e){
@@ -157,9 +180,13 @@ public class QueryDepartureAverageCost {
         if (scrollPane != null) {
             panel.remove(scrollPane);
         }
-        table = new JTable(data, columns);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 3;
+        c.gridwidth = 3;
+        JTable table = new JTable(data, columns);
         scrollPane = new JScrollPane(table);
-        panel.add(scrollPane);
+        panel.add(scrollPane, c);
         panel.revalidate();
         panel.repaint();
     }

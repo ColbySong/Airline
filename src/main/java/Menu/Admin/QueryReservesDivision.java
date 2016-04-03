@@ -9,23 +9,23 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 
 /**
- * Created by Colby on 2016-03-31.
+ * Created by BenGee on 2016-04-02.
  */
-public class QueryFlightDivision {
+public class QueryReservesDivision {
+
     private JPanel panel;
-    private JLabel label = new JLabel();
-    private Object[][] data;
     private JScrollPane scrollPane;
-    private String[] columns = new String[]{"Flight Number", "Number of Passengers"};
+    private Object[][] data;
+    private String[] columns = new String[]{"passport", "number of flights"};
     private GridBagConstraints c;
 
-    public void init(){
+    public void init() {
         panel = new JPanel();
         panel.setLayout(new GridBagLayout());
         c = new GridBagConstraints();
         Main.frame.add(panel);
 
-        findFlightWithAllPassengers();
+        displayPassengersWhoBookedAll();
 
         JButton backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
@@ -36,19 +36,18 @@ public class QueryFlightDivision {
             }
         });
         panel.add(backButton);
-
     }
 
-    public void findFlightWithAllPassengers(){
-        try{
+    private void displayPassengersWhoBookedAll() {
+        try {
             ResultSet mySet = Main.myStat.executeQuery(
-                    "SELECT flights.flight_no, count(passport_no) as 'number_of_passengers' " +
-                            "FROM flights left join reserves on flights.flight_no = reserves.flight_no " +
-                            "group by flights.flight_no " +
-                            "having count(*) = (select count(*) from passengers);");
+                    "SELECT passengers.passport_no, count(flight_no) as 'number_of_flights' " +
+                            "FROM passengers left join reserves on passengers.passport_no = reserves.passport_no " +
+                            "group by passengers.passport_no " +
+                            "having count(*) = (select count(*) from flights);");
             int rowCount = 0;
 
-            if(mySet.last()){
+            if (mySet.last()) {
                 rowCount = mySet.getRow();
                 mySet.beforeFirst();
             }
@@ -56,8 +55,8 @@ public class QueryFlightDivision {
             data = new Object[rowCount][columns.length];
             int j = 0;
 
-            while(mySet.next()){
-                for(int i=0; i<columns.length; i++) {
+            while (mySet.next()) {
+                for (int i = 0; i < columns.length; i++) {
                     data[j][i] = mySet.getObject(i + 1);
                 }
                 j++;
@@ -66,11 +65,12 @@ public class QueryFlightDivision {
             c.fill = GridBagConstraints.HORIZONTAL;
             c.gridx = 0;
             c.gridy = 0;
-            label.setText("Flights booked by all passengers");
+            JLabel label = new JLabel();
+            label.setText("Passenger who booked all flights");
             panel.add(label, c);
 
             refreshTable();
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

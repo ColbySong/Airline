@@ -57,7 +57,6 @@ public class QueryFlights {
 
     private List<String> filterColumns = new ArrayList<String>();
     private List<String> departingAirports;
-    private List<String> arrivingAirports;
 
     private String select_clause = "select ";
     private String from_clause = "from flights ";
@@ -482,7 +481,7 @@ public class QueryFlights {
         try {
             ResultSet arrivalSet = Main.myStat.executeQuery("select airportid_arrive from flights");
 
-            arrivingAirports = new ArrayList<String>();
+            List<String> arrivingAirports = new ArrayList<String>();
             arrivingAirports.add("- select airport -");
 
             while (arrivalSet.next()) {

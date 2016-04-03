@@ -1,18 +1,12 @@
 package main.java.Menu;
 
-import main.java.Menu.Admin.AdminPanel;
-import main.java.Menu.User.Passenger.CreatePassenger;
-import main.java.Menu.User.Passenger.Passenger;
-
+import main.java.Menu.Admin.*;
+import main.java.Menu.User.Passenger.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 /**
  * Created by Daniel on 2016-03-20.
@@ -27,21 +21,21 @@ public class Main {
     private static JPasswordField passwordField;
     private static JTextField adminIdLogin;
 
-    private static JLabel invalidPassportNoLabel;
-    private static JLabel invalidPasswordLabel;
+    private static JLabel invalidPassportOrPassword;
+
+    private static GridBagConstraints c;
 
     public static void main(String[] args) {
         try {
             Connection myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/airline", "root", "1234");
             myStat = myConn.createStatement();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         frame = new JFrame("Airline");
         panel = new JPanel();
-        GridBagConstraints c = new GridBagConstraints();
+        c = new GridBagConstraints();
         panel.setLayout(new GridBagLayout());
         frame.add(panel);
         frame.pack();
@@ -54,29 +48,31 @@ public class Main {
          */
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 1;
-        JLabel loginLabel = new JLabel("Login with your Passport Number");
+        c.gridy = 0;
+        JLabel loginLabel = new JLabel("Passport Number");
         panel.add(loginLabel, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
-        c.gridy = 1;
-        c.gridwidth = 5;
-        passportNoLogin = new JTextField(20);
-        passportNoLogin.setSize(100, 10);
+        c.gridy = 0;
+        passportNoLogin = new JTextField(5);
         panel.add(passportNoLogin, c);
 
-        // TODO: UI
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 1;
         JLabel passwordLabel = new JLabel("Password");
-        panel.add(passwordLabel);
-
-        // TODO: UI
-        passwordField = new JPasswordField(30);
-        panel.add(passwordField);
+        panel.add(passwordLabel, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 8;
+        c.gridx = 1;
         c.gridy = 1;
+        passwordField = new JPasswordField(5);
+        panel.add(passwordField, c);
+
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 2;
         JButton loginAsPassengerButton = new JButton("Login as Passenger");
         loginAsPassengerButton.addActionListener(new ActionListener() {
             @Override
@@ -90,38 +86,53 @@ public class Main {
         });
         panel.add(loginAsPassengerButton, c);
 
+        /**
+         * Create New Account
+         */
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 2;
-        invalidPassportNoLabel = new JLabel();
-        invalidPassportNoLabel.setForeground(Color.RED);
-        panel.add(invalidPassportNoLabel, c);
+        JButton createPassengerAccount = new JButton("Create Passenger Account");
+        createPassengerAccount.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.setVisible(false);
+                CreatePassenger cp = new CreatePassenger();
+                cp.init();
+            }
+        });
+        panel.add(createPassengerAccount, c);
 
-        // TODO: UI
-        invalidPasswordLabel = new JLabel();
-        invalidPasswordLabel.setForeground(Color.RED);
-        panel.add(invalidPasswordLabel);
+        /**
+         * Error Messages
+         */
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 3;
+        invalidPassportOrPassword = new JLabel(" ");
+        invalidPassportOrPassword.setForeground(Color.RED);
+        panel.add(invalidPassportOrPassword, c);
+
+        insertBlankSpace(0, 4);
 
         /**
          * Admin Login
          */
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 3;
-        final JLabel adminLoginLabel = new JLabel("Login with your Admin ID");
+        c.gridy = 5;
+        JLabel adminLoginLabel = new JLabel("Login with your Admin ID");
         panel.add(adminLoginLabel, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
-        c.gridy = 3;
-        c.gridwidth = 5;
-        adminIdLogin = new JTextField(20);
-        adminLoginLabel.setSize(100, 10);
+        c.gridy = 5;
+        adminIdLogin = new JTextField(5);
         panel.add(adminIdLogin, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 8;
-        c.gridy = 3;
+        c.gridx = 0;
+        c.gridy = 6;
         JButton adminIdLoginButton = new JButton("Login as Admin");
         panel.add(adminIdLoginButton, c);
         adminIdLoginButton.addActionListener(new ActionListener() {
@@ -136,51 +147,36 @@ public class Main {
             }
         });
 
-        /**
-         * Create New Account
-         */
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 8;
-        c.gridy = 4;
-        JButton createPassengerAccount = new JButton("Create Passenger Account");
-        createPassengerAccount.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                panel.setVisible(false);
-                CreatePassenger cp = new CreatePassenger();
-                cp.init();
-            }
-        });
-        panel.add(createPassengerAccount, c);
-
         frame.setVisible(true);
     }
 
+    private static void insertBlankSpace(int x, int y) {
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = x;
+        c.gridy = y;
+        JLabel blank = new JLabel(" ");
+        panel.add(blank, c);
+    }
+
     private static boolean isValidLogin(String passportNo, char[] password) {
+        String passwordString = new String(password);
         try {
-            ResultSet mySet = Main.myStat.executeQuery("select passport_no, password from passengers where passport_no = \"" + passportNo + "\"");
+            ResultSet results = Main.myStat.executeQuery("select passport_no, password from passengers where passport_no = " +
+                    "\'" + passportNo + "\'" + " and password = " + "\'" + passwordString + "\'");
 
-            invalidPassportNoLabel.setText("");
-            invalidPasswordLabel.setText("");
-
-            if (mySet.isBeforeFirst() && mySet.next()) {
-                if (mySet.getString("password").equals(new String(password))) {
-                    invalidPassportNoLabel.setText("");
-                    invalidPasswordLabel.setText("");
+            if (results.isBeforeFirst() && results.next()) {
+                if (results.getString("passport_no").equals(passportNo) && results.getString("password").equals(passwordString)) {
                     return true;
-                } else {
-                    invalidPasswordLabel.setText("Incorrect password, please try again.");
-                    return false;
                 }
             } else {
-                invalidPassportNoLabel.setText("Invalid passport number, please try again.");
+                invalidPassportOrPassword.setText("Invalid passport number or password");
+                return false;
             }
 
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return false;
     }
 }
