@@ -1,4 +1,4 @@
-package main.java.Menu.Admin;
+package main.java.Menu.User.Passenger;
 
 import main.java.Menu.*;
 import javax.swing.*;
@@ -156,7 +156,8 @@ public class CreatePassenger {
                 maxPassengerID = mySet.getInt("maxPID");
             }
 
-            if (maxPassengerID != 0) {
+            // SQL Statement: CHECK (passenger_id > 0);
+            if (maxPassengerID > 0) {
                 Main.myStat.executeUpdate("insert into passengers values ('" + passportNo + "', '" + (maxPassengerID + 1)
                         + "', '" + firstName + "', '" + lastName + "', '" + password + "')");
             }
@@ -207,7 +208,13 @@ public class CreatePassenger {
                 count = mySet.getInt("count");
             }
 
-            return count == 0;
+            if (count == 0) {
+                return true;
+            }
+            else {
+                passportNoErrorLabel.setText("Passport number already exists.");
+                return false;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

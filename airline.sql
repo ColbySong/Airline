@@ -21,7 +21,8 @@ create table passengers
 	first_name varchar(100),
 	last_name varchar(100),
 	password varchar(30),
-	primary key (passport_no));
+	primary key (passport_no),
+	check (passenger_id > 0));
     
 create table baggages 
 (baggage_id int,
@@ -103,19 +104,19 @@ insert into airports
 values('YUL', 'Montreal', 'ON');
 
 insert into passengers
-values('M142335','12345', 'Ben','Gee', 'bengee');
+values('M142335','1', 'Ben','Gee', 'bengee');
 
 insert into passengers
-values('M100502','16786','Qingzhou','Song', 'qingzhousong');
+values('M100502','2','Qingzhou','Song', 'qingzhousong');
 
 insert into passengers
-values('N300531','10000','Yoony','Ok', 'yoonyok');
+values('N300531','3','Yoony','Ok', 'yoonyok');
 
 insert into passengers
-values('P023945','19244','Daniel','Chen', 'danielchen');
+values('P023945','4','Daniel','Chen', 'danielchen');
 
 insert into passengers
-values('N239942','28442','Stella','Fang', 'stellafang');
+values('N239942','5','Stella','Fang', 'stellafang');
 
 insert into baggages
 values('14','50','Checked', 'M142335');

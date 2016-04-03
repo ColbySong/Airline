@@ -134,7 +134,7 @@ public class FlightReserver {
         try {
             ResultSet results = Main.myStat.executeQuery("select seat_no from reserves where flight_no =" + "\'" + reservedFlightNo + "\'");
 
-            List<Integer> bookedSeats = new ArrayList<>();
+            List<Integer> bookedSeats = new ArrayList<Integer>();
             int i = 1;
 
             while (results.isBeforeFirst() && results.next()) {
@@ -160,7 +160,7 @@ public class FlightReserver {
         try {
             ResultSet results = Main.myStat.executeQuery("select confirmation_no from reserves where flight_no =" + "\'" + reservedFlightNo + "\'");
 
-            List<Integer> confirmedNums = new ArrayList<>();
+            List<Integer> confirmedNums = new ArrayList<Integer>();
             int i = 1;
 
             while (results.isBeforeFirst() && results.next()) {
