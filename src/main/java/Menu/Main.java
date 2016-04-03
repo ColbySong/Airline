@@ -170,12 +170,10 @@ public class Main {
                     return true;
                 } else {
                     invalidPasswordLabel.setText("Incorrect password, please try again.");
-                    System.out.println("incorrect password");
                     return false;
                 }
             } else {
                 invalidPassportNoLabel.setText("Invalid passport number, please try again.");
-                System.out.println("invalid passport no");
             }
 
 
