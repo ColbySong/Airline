@@ -160,22 +160,24 @@ public class Main {
         try {
             ResultSet mySet = Main.myStat.executeQuery("select passport_no, password from passengers where passport_no = \"" + passportNo + "\"");
 
+            invalidPassportNoLabel.setText("");
+            invalidPasswordLabel.setText("");
+
             if (mySet.isBeforeFirst() && mySet.next()) {
-                if (mySet.getString("passport_no").equals(passportNo) && mySet.getString("password").equals(new String(password))) {
+                if (mySet.getString("password").equals(new String(password))) {
                     invalidPassportNoLabel.setText("");
                     invalidPasswordLabel.setText("");
                     return true;
                 } else {
-                    if (!mySet.getString("passport_no").equals(passportNo)) {
-                        invalidPassportNoLabel.setText("Invalid passport number, please try again.");
-                        return false;
-                    }
-                    if (!mySet.getString("password").equals(new String(password))) {
-                        invalidPasswordLabel.setText("Incorrect password, please try again.");
-                    }
+                    invalidPasswordLabel.setText("Incorrect password, please try again.");
+                    System.out.println("incorrect password");
                     return false;
                 }
+            } else {
+                invalidPassportNoLabel.setText("Invalid passport number, please try again.");
+                System.out.println("invalid passport no");
             }
+
 
         } catch (SQLException e) {
             e.printStackTrace();
